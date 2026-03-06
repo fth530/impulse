@@ -1,0 +1,32 @@
+Initialize a new Expo React Native project. We are building a chic, hypercasual "Go/No-Go" brain-teaser game called "Tek Tuş Matematik". The entire app UI and all texts MUST be strictly in Turkish. Maintain a modern, pure white, minimalist Apple/Google aesthetic.
+
+Core Concept: The player sees a math equation and a dynamic rule. They must TAP the screen if the equation's result matches the rule, and DO NOTHING (wait for the timer) if it does not match.
+
+Game Mechanics & Rules:
+1. Math Engine: Generate random simple equations (e.g., 3+4, 8-2, 5x2) using numbers 1-12. Keep it simple but fast.
+2. Dynamic Rules (Turkish Strings): 
+   - "KURAL: ÇİFT SAYI" (Even)
+   - "KURAL: TEK SAYI" (Odd)
+   - "KURAL: ASAL SAYI" (Prime)
+   - "KURAL: 10'DAN BÜYÜK" (> 10)
+   The rule must change randomly every 3-5 turns. When it changes, briefly animate/flash the rule text to alert the player.
+3. Timer & Interactions (The "Go/No-Go" logic):
+   - Each equation has a strict 2.5-second timer (use a smooth shrinking progress bar via `react-native-reanimated` for 60fps).
+   - If Rule == TRUE: Player MUST tap the screen before time runs out. (Success: +1 Score, instantly load next equation, light haptic). If timer runs out -> GAME OVER.
+   - If Rule == FALSE: Player MUST NOT tap. They must wait for the timer to run out. (Success: +1 Score when timer ends, load next, light haptic). If they tap -> GAME OVER.
+4. Difficulty: Timer gets slightly faster (e.g., -0.05s) as the score increases, making it a high-pressure reflex test.
+
+UI & Aesthetic (Sleek, Modern, Minimalist):
+- Background: Pure white (`#FFFFFF`). No black backgrounds.
+- Typography: System sans-serif (SF Pro/Roboto), geometric, highly legible.
+- Layout: 
+  - Top: "SKOR: X" and "EN İYİ: Y".
+  - Middle: The active Rule in bold, distinct modern color (e.g., Mint Green `#00C853` or Deep Blue). Below it, the huge Math Equation (e.g., "5 + 7") in dark gray `#212121`.
+  - Bottom: A sleek animated timer bar that shrinks to the center or left.
+  - The entire screen acts as the single touchable area (`Pressable` or `TouchableOpacity`).
+- Modals & Menus:
+  - Main Menu: "TEK TUŞ MATEMATİK" title, a chic pill-shaped "OYNA" button, and a "NASIL OYNANIR?" button.
+  - How to Play Modal (Bottom Sheet): Explain the rules in Turkish: "Kurala uyuyorsa SÜRE BİTMEDEN DOKUN. Kurala uymuyorsa SAKIN DOKUNMA ve sürenin bitmesini bekle. Yanlış hamle yaparsan veya geç kalırsan yanarsın!"
+  - Game Over Overlay: Show final score, "YENİ REKOR!" (if applicable using AsyncStorage), and a "TEKRAR OYNA" button.
+
+Please write the complete logic, custom hooks (e.g., `useMathGame`), UI components, and wire everything up into a production-ready prototype in one go.
