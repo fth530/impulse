@@ -22,377 +22,10 @@ import { useMathGame } from "@/hooks/useMathGame";
 import { COLORS } from "@/constants/colors";
 import { Ionicons, Feather } from "@expo/vector-icons";
 
-// ─── Timer Bar ──────────────────────────────────────────────────────────────
-
-interface TimerBarProps {
-  equationKey: number;
-  duration: number;
-  active: boolean;
-}
-
-function TimerBar({ equationKey, duration, active }: TimerBarProps) {
-  const progress = useSharedValue(1);
-
-  useEffect(() => {
-    if (active) {
-      progress.value = 1;
-      progress.value = withTiming(0, {
-        duration,
-        easing: Easing.linear,
-      });
-    } else {
-      cancelAnimation(progress);
-      progress.value = 1;
-    }
-  }, [equationKey, active]);
-
-  const barStyle = useAnimatedStyle(() => ({
-    width: `${progress.value * 100}%` as any,
-    backgroundColor: interpolateColor(
-      progress.value,
-      [0, 0.3, 0.6, 1],
-      ["#FF3B30", "#FF9500", "#FFD60A", COLORS.mint]
-    ),
-  }));
-
-  return (
-    <View style={timerStyles.track}>
-      <Animated.View style={[timerStyles.bar, barStyle]} />
-    </View>
-  );
-}
-
-const timerStyles = StyleSheet.create({
-  track: {
-    width: "100%",
-    height: 6,
-    backgroundColor: "#F0F0F0",
-    borderRadius: 3,
-    overflow: "hidden",
-  },
-  bar: {
-    height: "100%",
-    borderRadius: 3,
-  },
-});
-
-// ─── Rule Flash Animation ────────────────────────────────────────────────────
-
-interface RuleBadgeProps {
-  label: string;
-  flash: boolean;
-}
-
-function RuleBadge({ label, flash }: RuleBadgeProps) {
-  const [lit, setLit] = useState(false);
-
-  useEffect(() => {
-    if (!flash) {
-      setLit(false);
-      return;
-    }
-    let count = 0;
-    setLit(true);
-    const id = setInterval(() => {
-      count++;
-      setLit((prev) => !prev);
-      if (count >= 5) clearInterval(id);
-    }, 130);
-    return () => clearInterval(id);
-  }, [flash, label]);
-
-  return (
-    <View
-      style={[
-        ruleStyles.badge,
-        {
-          backgroundColor: lit ? "#FFD60A30" : COLORS.mint + "18",
-          borderColor: lit ? "#FFD60A" : COLORS.mint,
-        },
-      ]}
-    >
-      <Text style={[ruleStyles.kural, { color: lit ? "#9A7800" : COLORS.mint }]}>
-        KURAL
-      </Text>
-      <Text style={[ruleStyles.label, { color: lit ? "#9A7800" : COLORS.mint }]}>
-        {label}
-      </Text>
-    </View>
-  );
-}
-
-const ruleStyles = StyleSheet.create({
-  badge: {
-    alignItems: "center",
-    paddingHorizontal: 28,
-    paddingVertical: 14,
-    borderRadius: 20,
-    borderWidth: 2,
-    gap: 2,
-  },
-  kural: {
-    fontSize: 11,
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: 3,
-  },
-  label: {
-    fontSize: 22,
-    fontFamily: "Inter_700Bold",
-    letterSpacing: 1,
-  },
-});
-
-// ─── How To Play Modal ───────────────────────────────────────────────────────
-
-interface HowToPlayModalProps {
-  visible: boolean;
-  onClose: () => void;
-}
-
-function HowToPlayModal({ visible, onClose }: HowToPlayModalProps) {
-  const insets = useSafeAreaInsets();
-
-  const rules = [
-    {
-      icon: "checkmark-circle" as const,
-      color: COLORS.mint,
-      title: "Kurala uyuyorsa DOKUN",
-      desc: "Süre bitmeden önce ekrana dokun. Geç kalırsan yanarsın!",
-    },
-    {
-      icon: "hand-left" as const,
-      color: COLORS.navy,
-      title: "Kurala uymuyorsa DOKUNMA",
-      desc: "Bekle ve sürenin bitmesini izle. Dokunursan yanarsın!",
-    },
-    {
-      icon: "flash" as const,
-      color: COLORS.orange,
-      title: "Kural değişiyor",
-      desc: "Her 3-5 turda bir kural değişir. Sarı yanıp söndüğünde dikkat et!",
-    },
-    {
-      icon: "trending-up" as const,
-      color: "#FF3B30",
-      title: "Zorluk artıyor",
-      desc: "Her doğru hamlede süre kısalır. Ne kadar dayanabilirsin?",
-    },
-  ];
-
-  return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-      transparent
-      onRequestClose={onClose}
-    >
-      <Pressable style={modalStyles.backdrop} onPress={onClose} />
-      <View
-        style={[
-          modalStyles.sheet,
-          { paddingBottom: Math.max(insets.bottom, 20) },
-        ]}
-      >
-        <View style={modalStyles.handle} />
-        <View style={modalStyles.header}>
-          <Text style={modalStyles.title}>NASIL OYNANIR?</Text>
-          <Pressable onPress={onClose} style={modalStyles.closeBtn}>
-            <Feather name="x" size={22} color={COLORS.gray} />
-          </Pressable>
-        </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={modalStyles.content}
-        >
-          {rules.map((rule, i) => (
-            <View key={i} style={modalStyles.ruleRow}>
-              <View
-                style={[modalStyles.iconWrap, { backgroundColor: rule.color + "18" }]}
-              >
-                <Ionicons name={rule.icon} size={24} color={rule.color} />
-              </View>
-              <View style={modalStyles.ruleText}>
-                <Text style={modalStyles.ruleTitle}>{rule.title}</Text>
-                <Text style={modalStyles.ruleDesc}>{rule.desc}</Text>
-              </View>
-            </View>
-          ))}
-
-          <View style={modalStyles.exampleBox}>
-            <Text style={modalStyles.exampleTitle}>Örnek</Text>
-            <Text style={modalStyles.exampleText}>
-              Kural{" "}
-              <Text style={{ color: COLORS.mint, fontFamily: "Inter_700Bold" }}>
-                ÇİFT SAYI
-              </Text>{" "}
-              ise ve denklem{" "}
-              <Text style={{ fontFamily: "Inter_700Bold", color: COLORS.dark }}>
-                3 + 5
-              </Text>{" "}
-              ise (sonuç = 8, çift) → <Text style={{ color: COLORS.mint, fontFamily: "Inter_600SemiBold" }}>DOKUN!</Text>
-            </Text>
-          </View>
-        </ScrollView>
-      </View>
-    </Modal>
-  );
-}
-
-const modalStyles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-  },
-  sheet: {
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    paddingTop: 12,
-    maxHeight: "78%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 20,
-    elevation: 20,
-  },
-  handle: {
-    width: 40,
-    height: 4,
-    backgroundColor: "#E0E0E0",
-    borderRadius: 2,
-    alignSelf: "center",
-    marginBottom: 20,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 24,
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 17,
-    fontFamily: "Inter_700Bold",
-    color: COLORS.dark,
-    letterSpacing: 1.5,
-  },
-  closeBtn: {
-    width: 36,
-    height: 36,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  content: {
-    padding: 24,
-    gap: 20,
-  },
-  ruleRow: {
-    flexDirection: "row",
-    gap: 16,
-    alignItems: "flex-start",
-  },
-  iconWrap: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-  },
-  ruleText: {
-    flex: 1,
-    gap: 3,
-  },
-  ruleTitle: {
-    fontSize: 15,
-    fontFamily: "Inter_600SemiBold",
-    color: COLORS.dark,
-  },
-  ruleDesc: {
-    fontSize: 13,
-    fontFamily: "Inter_400Regular",
-    color: COLORS.gray,
-    lineHeight: 19,
-  },
-  exampleBox: {
-    backgroundColor: COLORS.mint + "10",
-    borderRadius: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: COLORS.mint + "30",
-    gap: 6,
-    marginTop: 4,
-  },
-  exampleTitle: {
-    fontSize: 12,
-    fontFamily: "Inter_600SemiBold",
-    color: COLORS.mint,
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-  },
-  exampleText: {
-    fontSize: 14,
-    fontFamily: "Inter_400Regular",
-    color: COLORS.dark,
-    lineHeight: 21,
-  },
-});
-
-// ─── Score Pill ──────────────────────────────────────────────────────────────
-
-function ScorePill({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: number;
-  accent?: boolean;
-}) {
-  return (
-    <View style={[scorePillStyles.pill, accent && scorePillStyles.accentPill]}>
-      <Text style={[scorePillStyles.label, accent && scorePillStyles.accentLabel]}>
-        {label}
-      </Text>
-      <Text style={[scorePillStyles.value, accent && scorePillStyles.accentValue]}>
-        {value}
-      </Text>
-    </View>
-  );
-}
-
-const scorePillStyles = StyleSheet.create({
-  pill: {
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: "#F5F5F5",
-    borderRadius: 14,
-    minWidth: 80,
-  },
-  accentPill: {
-    backgroundColor: COLORS.navy,
-  },
-  label: {
-    fontSize: 10,
-    fontFamily: "Inter_600SemiBold",
-    color: COLORS.gray,
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-  },
-  accentLabel: {
-    color: "rgba(255,255,255,0.6)",
-  },
-  value: {
-    fontSize: 26,
-    fontFamily: "Inter_700Bold",
-    color: COLORS.dark,
-    lineHeight: 32,
-  },
-  accentValue: {
-    color: "#FFFFFF",
-  },
-});
+import { TimerBar } from "@/components/TimerBar";
+import { RuleBadge } from "@/components/RuleBadge";
+import { HowToPlayModal } from "@/components/HowToPlayModal";
+import { ScorePill } from "@/components/ScorePill";
 
 // ─── Main Screen ─────────────────────────────────────────────────────────────
 
@@ -445,6 +78,8 @@ export default function GameScreen() {
               pressed && styles.playButtonPressed,
             ]}
             onPress={game.startGame}
+            accessibilityRole="button"
+            accessibilityLabel="Oyunu Başlat"
           >
             <Text style={styles.playButtonText}>OYNA</Text>
             <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
@@ -456,6 +91,8 @@ export default function GameScreen() {
               pressed && { opacity: 0.6 },
             ]}
             onPress={() => setShowHowTo(true)}
+            accessibilityRole="button"
+            accessibilityLabel="Nasıl Oynanır"
           >
             <Feather name="help-circle" size={16} color={COLORS.gray} />
             <Text style={styles.howToButtonText}>NASIL OYNANIR?</Text>
@@ -512,6 +149,8 @@ export default function GameScreen() {
                 pressed && styles.restartButtonPressed,
               ]}
               onPress={game.startGame}
+              accessibilityRole="button"
+              accessibilityLabel="Tekrar Oyna"
             >
               <Ionicons name="refresh" size={20} color="#FFFFFF" />
               <Text style={styles.restartButtonText}>TEKRAR OYNA</Text>
@@ -523,6 +162,8 @@ export default function GameScreen() {
                 pressed && { opacity: 0.6 },
               ]}
               onPress={game.goToMenu}
+              accessibilityRole="button"
+              accessibilityLabel="Menüye Dön"
             >
               <Feather name="home" size={16} color={COLORS.gray} />
               <Text style={styles.menuButtonSmallText}>MENÜ</Text>
