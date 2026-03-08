@@ -19,6 +19,20 @@ function RootLayoutNav() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="stats"
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+        }}
+      />
+      <Stack.Screen
+        name="settings"
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+        }}
+      />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

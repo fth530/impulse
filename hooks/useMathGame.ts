@@ -184,9 +184,41 @@ interface GameRef {
   turnId: number;
   timer: ReturnType<typeof setTimeout> | null;
   flashTimer: ReturnType<typeof setTimeout> | null;
+  // New tracking fields
+  correctCount: number;
+  wrongCount: number;
+  currentStreak: number;
+  maxStreak: number;
+  startTime: number;
 }
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
+
+export function getDifficultyLevel(score: number): number {
+  if (score > 60) return 4;
+  if (score >= 15) return 3;
+  if (score > 10) return 2;
+  return 1;
+}
+
+export function getDifficultyLabel(level: number): string {
+  switch (level) {
+    case 1: return "BAŞLANGIÇ";
+    case 2: return "ORTA";
+    case 3: return "ZOR";
+    case 4: return "UZMAN";
+    default: return "BAŞLANGIÇ";
+  }
+}
+
+export interface GameEndData {
+  score: number;
+  correctCount: number;
+  wrongCount: number;
+  maxStreak: number;
+  durationMs: number;
+  maxDifficulty: number;
+}
 
 export function useMathGame() {
   const [gameState, setGameState] = useState<GameState>("menu");
@@ -194,6 +226,8 @@ export function useMathGame() {
   const [bestScore, setBestScore] = useState(0);
   const [isNewRecord, setIsNewRecord] = useState(false);
   const [equation, setEquation] = useState<Equation>(generateEquation(0));
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [gameEndData, setGameEndData] = useState<GameEndData | null>(null);
 
   const initialRule = { id: "even", label: "ÇİFT SAYI" };
   const [rule, setRule] = useState<Rule>(initialRule);
@@ -212,6 +246,11 @@ export function useMathGame() {
     turnId: 0,
     timer: null,
     flashTimer: null,
+    correctCount: 0,
+    wrongCount: 0,
+    currentStreak: 0,
+    maxStreak: 0,
+    startTime: 0,
   });
 
   const doGameOverRef = useRef<() => void>(() => { });
@@ -244,9 +283,20 @@ export function useMathGame() {
     g.current.isPlaying = false;
     g.current.tapLocked = true;
     g.current.turnId += 1;
+    g.current.wrongCount += 1;
     cancelAllTimers();
 
     const finalScore = g.current.score;
+    const endData: GameEndData = {
+      score: finalScore,
+      correctCount: g.current.correctCount,
+      wrongCount: g.current.wrongCount,
+      maxStreak: g.current.maxStreak,
+      durationMs: Date.now() - g.current.startTime,
+      maxDifficulty: getDifficultyLevel(finalScore),
+    };
+    setGameEndData(endData);
+
     let newRecord = false;
     try {
       const storedBest = await AsyncStorage.getItem(BEST_SCORE_KEY);
@@ -308,6 +358,12 @@ export function useMathGame() {
       } else {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         g.current.score += 1;
+        g.current.correctCount += 1;
+        g.current.currentStreak += 1;
+        if (g.current.currentStreak > g.current.maxStreak) {
+          g.current.maxStreak = g.current.currentStreak;
+        }
+        setCurrentStreak(g.current.currentStreak);
         setDisplayScore(g.current.score);
         g.current.turnsSinceRuleChange += 1;
         const shouldChange = g.current.turnsSinceRuleChange >= g.current.nextRuleChangeAt;
@@ -328,10 +384,17 @@ export function useMathGame() {
     g.current.isPlaying = true;
     g.current.tapLocked = false;
     g.current.turnId += 1;
+    g.current.correctCount = 0;
+    g.current.wrongCount = 0;
+    g.current.currentStreak = 0;
+    g.current.maxStreak = 0;
+    g.current.startTime = Date.now();
 
     setDisplayScore(0);
+    setCurrentStreak(0);
     setIsNewRecord(false);
     setRuleFlash(false);
+    setGameEndData(null);
     setRule(g.current.rule);
     setGameState("playing");
 
@@ -352,11 +415,19 @@ export function useMathGame() {
 
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       g.current.score += 1;
+      g.current.correctCount += 1;
+      g.current.currentStreak += 1;
+      if (g.current.currentStreak > g.current.maxStreak) {
+        g.current.maxStreak = g.current.currentStreak;
+      }
+      setCurrentStreak(g.current.currentStreak);
       setDisplayScore(g.current.score);
       g.current.turnsSinceRuleChange += 1;
       const shouldChange = g.current.turnsSinceRuleChange >= g.current.nextRuleChangeAt;
       setupNextTurnRef.current(shouldChange);
     } else {
+      g.current.currentStreak = 0;
+      setCurrentStreak(0);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       doGameOverRef.current();
     }
@@ -381,6 +452,8 @@ export function useMathGame() {
     ruleMatches,
     ruleFlash,
     timerDuration,
+    currentStreak,
+    gameEndData,
     startGame,
     handleTap,
     goToMenu,
