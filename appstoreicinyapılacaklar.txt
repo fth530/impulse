@@ -1,0 +1,360 @@
+==============================================================
+  IMPULSE - Tek Tuş Matematik
+  App Store Yayın Öncesi Yapılacaklar Listesi
+  Tarih: 8 Mart 2026
+==============================================================
+
+
+[1] KRİTİK - YAPILMAZSA RED GELİR
+--------------------------------------------------------------
+
+1.1 Bundle Identifier Değiştir *** EN SON YAPILACAK ***
+    Dosya: app.json
+    Mevcut: "bundleIdentifier": "com.myapp" (placeholder)
+    Yapılacak: "com.corut.impulse" veya "com.reflexsgaming.tektusmatematik" gibi
+    gerçek, benzersiz bir identifier yaz.
+    Android package da aynı şekilde değişmeli.
+
+    NOT: Diğer tüm maddeler tamamlandıktan sonra en son adım olarak yapılacak.
+    Önce Apple Developer Portal'da Certificates, Identifiers & Profiles →
+    Identifiers → "+" ile yeni Bundle ID oluştur, sonra app.json'a yaz.
+
+1.2 Gizlilik Politikası (Privacy Policy)
+    Apple mutlaka bir Privacy Policy URL'i istiyor.
+    Uygulama lokal veri tutuyor (AsyncStorage ile skor, ayarlar).
+    Basit bir gizlilik politikası sayfası oluşturup URL'ini
+    App Store Connect'e eklemelisin.
+    Notion, GitHub Pages veya kendi siten üzerinden yayınlayabilirsin.
+    KVKK, GDPR, CCPA uyumlu olması stratejik avantaj sağlar.
+
+1.3 Yaş Derecelendirmesi (Age Rating)
+    Ocak 2026'da yeni yaş sistemi geldi: 4+, 9+, 13+, 16+, 18+
+    App Store Connect'te güncel yaş derecelendirme sorularını cevaplamalısın.
+    Bu oyun muhtemelen 4+ kategorisinde.
+
+1.4 Replit Origin Kaldır
+    Dosya: app.json → plugins → expo-router
+    Mevcut: "origin": "https://replit.com/"
+    Yapılacak: Production domain'in ile değiştir veya tamamen kaldır.
+    Bu development ortamından kalan bir ayar, production'da sorun çıkarır.
+
+1.5 iOS Build Number Ekle
+    Dosya: app.json → ios
+    App Store her yüklemede artan bir buildNumber ister.
+    Eklenecek: "buildNumber": "1"
+    Her yeni build'de bu numara artırılmalı.
+
+1.6 Slug ve Scheme Değiştir
+    Dosya: app.json
+    Mevcut: "slug": "my-app", "scheme": "myapp"
+    Yapılacak: "slug": "impulse", "scheme": "impulse"
+    Gerçek uygulama adıyla değiştirilmeli.
+
+
+[2] ÖNEMLİ - YAPILMAZSA RED RİSKİ VAR
+--------------------------------------------------------------
+
+2.1 Kullanılmayan Bağımlılıkları Kaldır
+    Şu paketler yüklü ama hiç kullanılmıyor:
+    - expo-location
+    - expo-image-picker
+    - expo-glass-effect
+    Apple gereksiz izin isteyen uygulamaları reddediyor.
+    Komut: npx expo install --fix && npm uninstall expo-location expo-image-picker expo-glass-effect
+
+2.2 EAS Build Yapılandırması Oluştur
+    eas.json dosyası yok. App Store'a göndermek için gerekli.
+    Komut: npx eas-cli init && npx eas build:configure
+    Ardından eas.json'da production profili ayarlanmalı.
+
+2.3 Nisan 2026 SDK Gerekliliği
+    28 Nisan 2026'dan itibaren uygulamalar iOS 26 SDK ile build edilmeli.
+    Şu an Expo SDK 54 kullanılıyor.
+    Expo'nun iOS 26 SDK destekleyen sürümüne geçiş gerekecek.
+    Expo blog ve changelog takip edilmeli.
+
+2.4 EXPO_PUBLIC_DOMAIN Ortam Değişkeni
+    Dosya: lib/query-client.ts
+    Bu değişken tanımlı değilse production'da crash yapabilir.
+    .env dosyasında veya EAS secrets'ta tanımlanmalı.
+    Ya da kullanılmıyorsa query-client.ts temizlenmeli.
+
+2.5 Uygulama İsmi Tutarlılığı
+    app.json: "Tek Tuş Matematik"
+    package.json: "expo-app"
+    settings.tsx footer: "IMPULSE v1.0"
+    Tek bir isimde karar verilip her yerde aynı kullanılmalı.
+
+2.6 Uygulama Stabilitesi
+    - Uygulama herhangi bir anda çöküyorsa reddedilir.
+    - Farklı iPhone/iPad modellerinde ekran bozulması, uyumsuz UI reddedilme sebebi.
+    - Offline durum, düşük bellek gibi senaryolar düzgün yönetilmeli.
+    - Ağ yokken uygulamanın davranışı test edilmeli.
+
+2.7 Destek ve İletişim URL'leri
+    - App Store Connect'e geçerli bir destek e-postası veya web sitesi girilmeli.
+    - Bozuk linkler bile reddedilme sebebi olabiliyor.
+
+
+[3] UI/UX ve Apple Tasarım Kriterleri
+--------------------------------------------------------------
+
+Apple tasarım ve UX kalitesine çok önem veriyor. Bunlar itiraz ve
+reddi azaltır:
+
+3.1 iOS Human Interface Guidelines Uyumu
+    - Navigation açık ve anlaşılır olmalı.
+    - Düğmeler sıkışık veya çarpık görünmemeli.
+    - Dokunmatik hissiyat, çerçeve/constraint uyumu sağlanmalı.
+
+3.2 Placeholder'sız Tamamlanmış Ekranlar
+    - Her ekran teste hazır olmalı.
+    - Loading, error, empty state ekranları düzgün gösterilmeli.
+    - Hatalı placeholder veya boş ekranlar reddedilme sebebi.
+
+3.3 Mevcut Durum (Bu Projede)
+    [OK] accessibilityRole ve accessibilityLabel kullanılıyor
+    [OK] Safe area insets doğru uygulanmış
+    [OK] Reanimated ile 60/120 FPS animasyonlar
+    [EKLENEBİLİR] Dynamic Type desteği
+    [EKLENEBİLİR] VoiceOver tam uyumluluk testi
+
+
+[4] Meta Veri & App Store Asset'leri
+--------------------------------------------------------------
+
+Uygulamanın mağazada ilk izlenim yaratacak tüm görselleri:
+
+4.1 App İkon
+    - 1024x1024 PNG (mevcut: assets/images/icon.png — OK)
+    - Optimize et: 379KB → ~100KB (TinyPNG ile)
+
+4.2 Ekran Görüntüleri (Zorunlu)
+    - 6.7" iPhone screenshot'ları (iPhone 15 Pro Max) — zorunlu
+    - 6.1" iPhone screenshot'ları — zorunlu
+    - En az 3-5 screenshot: menü, oyun, game over, istatistikler, ayarlar
+    - Screenshot'lar gerçek uygulama ile uyumlu olmalı
+    - Yanıltıcı screenshot'lar reddedilme sebebi
+
+4.3 Uygulama Açıklaması
+    - Türkçe + İngilizce açıklama hazırla
+    - Gerçekçi ve doğru açıklamalar (yanıltıcı iddialar = red)
+    - Açıklama ile uygulama fonksiyonları birebir uyumlu olmalı
+
+4.4 Tanıtım Videosu (Opsiyonel ama Etkili)
+    - 30 saniyelik App Preview videosu
+    - Dönüşüm oranını ciddi artırır
+
+4.5 Anahtar Kelimeler
+    - matematik oyunu, refleks, beyin egzersizi, mental matematik,
+      tek tuş, hızlı düşünme, math game, brain training
+
+
+[5] Güvenlik ve Kod Gereksinimleri
+--------------------------------------------------------------
+
+5.1 Kod İmzalama
+    - Uygulama doğru Apple sertifikalarıyla imzalanmalı.
+    - EAS Build bu işi otomatik yapar.
+
+5.2 Şifreleme Beyanı
+    - HTTPS kullanan uygulamalar şifreleme beyanı gerektirebilir.
+    - App Store Connect'te "Export Compliance" sorusuna doğru yanıt ver.
+
+5.3 SDK Güvenliği
+    - Entegre edilen SDK'lar Apple'ın güvenlik standartlarını bozmamalı.
+    - Tüm SDK'ların privacy etiketlerini doldur.
+
+
+[6] Monetizasyon Politikaları (Gelecek İçin)
+--------------------------------------------------------------
+
+Şu an uygulama ücretsiz ve IAP yok, ancak ileride eklenirse:
+
+6.1 Apple IAP Kuralları
+    - Dijital içerikler için üçüncü parti ödeme kabul edilemez.
+    - Apple'ın In-App Purchase sistemi zorunlu.
+    - Abonelik varsa: restore purchases ve subscription info UI'ları şart.
+
+6.2 Gelir Vergilendirme (Türkiye)
+    - Kazanç varsa şirket olmadan ticari gelir yazmak riskli.
+    - Apple komisyonu: küçük ölçekte düşük, büyüdükçe %30.
+
+6.3 Reklam Eklenirse
+    - ATT (App Tracking Transparency) izni zorunlu.
+    - Privacy Labels güncellenmeli.
+
+
+[7] Sürüm Yönetimi ve Güncellemeler
+--------------------------------------------------------------
+
+7.1 Her güncelleme yeniden review sürecine girer.
+7.2 Semantic versioning kullan: major.minor.patch (1.0.0, 1.0.1, 1.1.0)
+7.3 buildNumber her submission'da artırılmalı.
+7.4 Hotfix / patch sürümleri için TestFlight + phased release kullan.
+7.5 Rollback stratejisi belirle.
+
+
+[8] Test Checklist - Reject Almamak İçin
+--------------------------------------------------------------
+
+[  ] TestFlight'a yükle, en az 5-10 farklı cihazda test et
+[  ] Oyunu hızlı hızlı oyna, kenar durumları test et
+[  ] Arka plana atıp geri gel — crash olmamalı
+[  ] İnternet kesintisi senaryosu — düzgün davranmalı
+[  ] Memory leak kontrolü yap
+[  ] Tüm ekranları farklı iPhone boyutlarında kontrol et
+[  ] Ses açık/kapalı geçişleri test et
+[  ] Ayarlar değişiklikleri kalıcı mı kontrol et
+[  ] İstatistikler ekranı 0 oyun ve 20 oyunda düzgün mü
+[  ] "Verileri Sıfırla" düzgün çalışıyor mu
+
+
+[9] App Store Optimization (ASO)
+--------------------------------------------------------------
+
+ASO, App Store'un SEO'sudur. Doğru yapıldığında reklam maliyetini
+ciddi düşürür.
+
+9.1 Başlık ve Alt Başlık Optimizasyonu
+    - Başlık: "Impulse - Tek Tuş Matematik" (veya tersi)
+    - Alt başlık: "Refleks ve Matematik Oyunu"
+    - Anahtar kelimeleri başlığa doğal şekilde yerleştir
+
+9.2 Anahtar Kelime Stratejisi
+    - Hedef: matematik oyunu, refleks, beyin egzersizi, mental matematik
+    - 6-15. pozisyondaki kelimeler "low-hanging fruit" — az çabayla üst sıralara çıkar
+    - Rakiplerin boş bıraktığı niş ifadeleri hedefle
+    - Aylık ASO sprint'leri ile sürekli optimize et
+
+9.3 Creative Optimization
+    - Segment bazlı screenshot'lar üret (Türkiye vs global)
+    - Custom Product Pages ile farklı pazarlara farklı ilk izlenim
+    - A/B test ile hangi görsellerin CVR artırdığını ölç
+
+9.4 In-App Events (Apple Feature Signals)
+    - Apple In-App Events kullan → küratör listelerde görünme şansı
+    - Küçük ama ilgi çekici etkinlikler bile algoritmanın dikkatini çeker
+    - Sezonluk temalar (yaz challenge, yılbaşı özel modu vs.)
+
+9.5 Kullanıcı Davranışı → Algoritma Sinyalleri
+    Apple algoritması artık sadece indirme sayısına değil, şunlara da bakıyor:
+    - Retention / uninstall oranı
+    - Crash rate
+    - Etkileşim süresi (kullanıcı ne kadar kalıyor)
+    - Quality signals
+    ASO'daki hedef kitleyle uygulama içi deneyim uyumlu olmalı.
+
+9.6 Paid → Organic Loop (Reklam Verirsen)
+    - Apple Search Ads ile düşük CPA kelimeleri keşfet
+    - Bunları organik ASO'ya dahil et
+    - Organikte ilk 5'teysen o kelimede paid'i durdur, kaynağı yeni kelimelere ver
+
+9.7 ASO Performans KPI'ları
+    - Search Impressions → Search Rank
+    - Tap-Through Rate (CTR) → Install ratio
+    - Retention / uninstall signals
+    - Crash / performance metrics
+
+
+[10] Pazarlama ve Growth (Launch Sonrası)
+--------------------------------------------------------------
+
+10.1 Launch Kampanyası
+     - ASO stratejisiyle eş zamanlı yürüt
+     - Landing page hazırla (opsiyonel)
+
+10.2 Sosyal Medya
+     - TikTok odaklı hızlı içerik → organik büyüme
+     - "Bu matematik oyununu yenebilir misin?" tarzı challenge videoları
+     - Kullanıcı tarafından oluşturulan içerik teşviki
+
+10.3 Apple Search Ads
+     - İlk organik sıralamayı desteklemek için kullan
+     - Düşük bütçeyle başla, dönüşüm veren kelimeleri organik ASO'ya aktar
+
+10.4 Anti-Abuse
+     - Sahte review, sahte indirme gibi yöntemlerden kaçın
+     - Apple algoritması artık spam davranışları cezalandırıyor
+     - Gerçek kullanıcı davranışına odaklan
+
+
+[11] BU OTURUMDA YAPILAN DEĞİŞİKLİKLER
+--------------------------------------------------------------
+
+Branch: feat/pro-ui-sound-stats
+
+11.1 Profesyonel Menü Ekranı
+     - Küçük "En İyi: 23" yerine büyük kart tasarımlı best score
+     - Trophy ikonu, büyük sayı, tıklanınca istatistiklere gidiyor
+     - Sağ üste İstatistikler ve Ayarlar butonları eklendi
+
+11.2 Zengin Game Over Ekranı
+     - Skor hero kartı (büyük skor, yeni rekor badge'i)
+     - 2x2 istatistik grid: Doğru sayısı, süre, en iyi seri, zorluk seviyesi
+     - Animasyonlu geçiş (shake + fade)
+
+11.3 Oyun İçi Streak Göstergesi
+     - Header'da combo sayacı (2+ streak'te görünür)
+     - 5+ turuncu, 10+ kırmızı ateş animasyonu
+     - Her doğruda bounce animasyonu
+
+11.4 Ekranlar Arası Animasyonlar
+     - Menü → Oyun: fade + scale
+     - Oyun → Game Over: shake + fade
+     - Game Over → Menü: smooth fade
+
+11.5 İstatistikler Ekranı (/stats)
+     - Toplam oyun, ortalama skor, en iyi skor, en uzun seri
+     - İsabet oranı progress bar
+     - Son 20 oyun listesi (tarih, süre, zorluk, seri)
+
+11.6 Ayarlar Ekranı (/settings)
+     - Titreşim açma/kapama
+     - Ses efektleri açma/kapama
+     - Verileri sıfırlama (onaylı)
+
+11.7 Ses Sistemi (expo-av)
+     - Oyun başlangıç sesi (start.wav → bgm-loop.wav)
+     - Doğru cevap sesi (dogrucevap.wav → correct.wav)
+     - Streak sesi (streak.wav) — 5, 10, 15... combo'da çalar
+     - Game over sesi (gameover.wav)
+     - Ayarlardan kontrol edilebilir
+
+11.8 Yeni Hook'lar
+     - useGameHistory: Son 20 oyun kaydı, istatistikler (AsyncStorage)
+     - useSettings: Ayarlar kalıcı depolama
+     - useGameAudio: Ses yönetimi
+     - useMathGame'e eklenenler: streak, doğru/yanlış, süre, zorluk takibi
+
+
+[12] KAYNAKLAR
+--------------------------------------------------------------
+
+- App Review Guidelines:
+  https://developer.apple.com/app-store/review/guidelines/
+
+- iOS Human Interface Guidelines:
+  https://developer.apple.com/design/human-interface-guidelines/
+
+- Nisan 2026 SDK Değişiklikleri:
+  https://medium.com/@thakurneeshu280/apple-app-store-submission-changes-april-2026
+
+- Yaş Derecelendirme Güncellemesi:
+  https://developer.apple.com/news/upcoming-requirements/?id=07242025a
+
+- Apple Developer Güncel Haberler:
+  https://developer.apple.com/news/
+
+- Expo EAS Build Dokümantasyonu:
+  https://docs.expo.dev/build/introduction/
+
+- App Store Connect Yardım:
+  https://developer.apple.com/help/app-store-connect/
+
+
+==============================================================
+  Not: Bu liste 8 Mart 2026 tarihinde oluşturulmuştur.
+  Apple kuralları sürekli güncellenir, yayın öncesi
+  developer.apple.com'dan son durumu kontrol edin.
+==============================================================
