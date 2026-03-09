@@ -32,17 +32,17 @@ export function useGameHistory() {
       .then((val) => {
         if (val) setHistory(JSON.parse(val));
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, []);
 
-  const addRecord = useCallback(async (record: GameRecord) => {
-    const stored = await AsyncStorage.getItem(HISTORY_KEY);
-    const list: GameRecord[] = stored ? JSON.parse(stored) : [];
-    list.unshift(record);
-    const trimmed = list.slice(0, MAX_HISTORY);
-    await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
-    setHistory(trimmed);
+  const addRecord = useCallback((record: GameRecord) => {
+    setHistory((currentHistory) => {
+      const newList = [record, ...currentHistory].slice(0, MAX_HISTORY);
+      // Fire and forget to storage
+      AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(newList)).catch(() => { });
+      return newList;
+    });
   }, []);
 
   const clearHistory = useCallback(async () => {

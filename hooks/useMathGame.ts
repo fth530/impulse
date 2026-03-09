@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { AppState, AppStateStatus } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Haptics from "expo-haptics";
 
@@ -272,7 +273,17 @@ export function useMathGame() {
       if (val !== null) setBestScore(parseInt(val, 10));
     });
 
+    const subscription = AppState.addEventListener("change", (nextAppState: AppStateStatus) => {
+      if (
+        (nextAppState === "background" || nextAppState === "inactive") &&
+        g.current.isPlaying
+      ) {
+        doGameOverRef.current();
+      }
+    });
+
     return () => {
+      subscription.remove();
       g.current.isPlaying = false;
       g.current.turnId += 1;
       cancelAllTimers();
