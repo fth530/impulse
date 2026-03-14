@@ -1,8 +1,8 @@
-# Privacy Policy for Impulse
+# Privacy Policy for MathPulse
 
 **Effective Date:** March 9, 2026
 
-Thank you for choosing to play **Impulse - Tek Tuş Matematik** ("the App"). We are committed to protecting your privacy. This Privacy Policy outlines our practices regarding data collection and usage.
+Thank you for choosing to play **MathPulse - Tek Tuş Matematik** ("the App"). We are committed to protecting your privacy. This Privacy Policy outlines our practices regarding data collection and usage.
 
 ## 1. Information We Collect
 **We do not collect any personal data.** 
@@ -28,4 +28,4 @@ Our App is safe for users of all ages and complies with the Children’s Online 
 We may update our Privacy Policy from time to time. Since we do not collect your contact information, we cannot notify you individually. Any changes will be posted on this page with an updated "Effective Date".
 
 ## 5. Contact Us
-If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at: **[KENDI MAIL ADRESINI YAZ]**.
+If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at: **mathpulse.app@gmail.com**.

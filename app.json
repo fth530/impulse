@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Impulse",
-    "slug": "impulse",
+    "name": "MathPulse",
+    "slug": "mathpulse",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "impulse",
+    "scheme": "mathpulse",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -15,14 +15,14 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.corut.impulse",
+      "bundleIdentifier": "com.corut.mathpulse",
       "buildNumber": "1",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "package": "com.corut.impulse",
+      "package": "com.corut.mathpulse",
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF",

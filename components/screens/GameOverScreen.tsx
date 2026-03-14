@@ -2,7 +2,9 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
-import { GameEndData, getDifficultyLabel } from "@/hooks/useMathGame";
+import { GameEndData } from "@/hooks/useMathGame";
+import { useT } from "@/i18n/LanguageContext";
+import { getDifficultyLabelTranslated } from "@/i18n/ruleLabels";
 
 interface GameOverScreenProps {
     score: number;
@@ -25,23 +27,23 @@ export function GameOverScreen({
     topPad,
     bottomPad,
 }: GameOverScreenProps) {
+    const t = useT();
     const durationSecs = gameEndData ? Math.floor(gameEndData.durationMs / 1000) : 0;
     const durationStr =
         durationSecs >= 60
-            ? `${Math.floor(durationSecs / 60)}dk ${durationSecs % 60}s`
+            ? `${Math.floor(durationSecs / 60)}m ${durationSecs % 60}s`
             : `${durationSecs}s`;
-    const diffLabel = gameEndData ? getDifficultyLabel(gameEndData.maxDifficulty) : "";
+    const diffLabel = gameEndData ? getDifficultyLabelTranslated(gameEndData.maxDifficulty, t) : "";
 
     return (
         <ScrollView
             contentContainerStyle={[styles.gameOverScroll, { paddingTop: topPad + 8, paddingBottom: bottomPad + 20 }]}
             showsVerticalScrollIndicator={false}
         >
-            {/* Score Hero Section */}
             <View style={styles.scoreHero}>
                 <View style={styles.scoreHeroTop}>
                     <Ionicons name="close-circle" size={36} color="#FF3B30" />
-                    <Text style={styles.gameOverLabel}>OYUN BİTTİ</Text>
+                    <Text style={styles.gameOverLabel}>{t.gameOver}</Text>
                 </View>
 
                 <Text style={styles.finalScore}>{score}</Text>
@@ -49,19 +51,16 @@ export function GameOverScreen({
                 {isNewRecord ? (
                     <View style={styles.newRecordBadge}>
                         <Ionicons name="trophy" size={14} color={COLORS.orange} />
-                        <Text style={styles.newRecordText}>YENİ REKOR!</Text>
+                        <Text style={styles.newRecordText}>{t.newRecord}</Text>
                     </View>
                 ) : bestScore > 0 ? (
                     <View style={styles.bestRowInline}>
                         <Ionicons name="trophy-outline" size={14} color={COLORS.orange} />
-                        <Text style={styles.bestRowInlineText}>
-                            En İyi: {bestScore}
-                        </Text>
+                        <Text style={styles.bestRowInlineText}>{t.bestInline(bestScore)}</Text>
                     </View>
                 ) : null}
             </View>
 
-            {/* Stats 2x2 Grid */}
             {gameEndData && (
                 <View style={styles.statsGrid2x2}>
                     <View style={styles.stat2x2Card}>
@@ -69,7 +68,7 @@ export function GameOverScreen({
                             <Ionicons name="checkmark-circle" size={18} color={COLORS.mint} />
                         </View>
                         <Text style={styles.stat2x2Value}>{gameEndData.correctCount}</Text>
-                        <Text style={styles.stat2x2Label}>Doğru</Text>
+                        <Text style={styles.stat2x2Label}>{t.correct}</Text>
                     </View>
 
                     <View style={styles.stat2x2Card}>
@@ -77,7 +76,7 @@ export function GameOverScreen({
                             <Ionicons name="time" size={18} color={COLORS.navy} />
                         </View>
                         <Text style={styles.stat2x2Value}>{durationStr}</Text>
-                        <Text style={styles.stat2x2Label}>Süre</Text>
+                        <Text style={styles.stat2x2Label}>{t.duration}</Text>
                     </View>
 
                     <View style={styles.stat2x2Card}>
@@ -85,7 +84,7 @@ export function GameOverScreen({
                             <Ionicons name="flame" size={18} color={COLORS.orange} />
                         </View>
                         <Text style={styles.stat2x2Value}>{gameEndData.maxStreak}x</Text>
-                        <Text style={styles.stat2x2Label}>En İyi Seri</Text>
+                        <Text style={styles.stat2x2Label}>{t.bestStreak}</Text>
                     </View>
 
                     <View style={styles.stat2x2Card}>
@@ -93,37 +92,30 @@ export function GameOverScreen({
                             <Ionicons name="speedometer" size={18} color="#FF3B30" />
                         </View>
                         <Text style={styles.stat2x2Value}>{diffLabel}</Text>
-                        <Text style={styles.stat2x2Label}>Seviye</Text>
+                        <Text style={styles.stat2x2Label}>{t.level}</Text>
                     </View>
                 </View>
             )}
 
-            {/* Buttons */}
             <View style={styles.gameOverButtons}>
                 <Pressable
-                    style={({ pressed }) => [
-                        styles.restartButton,
-                        pressed && styles.restartButtonPressed,
-                    ]}
+                    style={({ pressed }) => [styles.restartButton, pressed && styles.restartButtonPressed]}
                     onPress={onRestart}
                     accessibilityRole="button"
-                    accessibilityLabel="Tekrar Oyna"
+                    accessibilityLabel={t.playAgainAccessibility}
                 >
                     <Ionicons name="refresh" size={20} color="#FFFFFF" />
-                    <Text style={styles.restartButtonText}>TEKRAR OYNA</Text>
+                    <Text style={styles.restartButtonText}>{t.playAgain}</Text>
                 </Pressable>
 
                 <Pressable
-                    style={({ pressed }) => [
-                        styles.menuButtonSmall,
-                        pressed && { opacity: 0.6 },
-                    ]}
+                    style={({ pressed }) => [styles.menuButtonSmall, pressed && { opacity: 0.6 }]}
                     onPress={onMenu}
                     accessibilityRole="button"
-                    accessibilityLabel="Menüye Dön"
+                    accessibilityLabel={t.menuAccessibility}
                 >
                     <Feather name="home" size={16} color={COLORS.gray} />
-                    <Text style={styles.menuButtonSmallText}>MENÜ</Text>
+                    <Text style={styles.menuButtonSmallText}>{t.menu}</Text>
                 </Pressable>
             </View>
         </ScrollView>

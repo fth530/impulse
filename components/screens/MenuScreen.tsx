@@ -4,6 +4,7 @@ import { Ionicons, Feather } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
 import { HowToPlayModal } from "@/components/HowToPlayModal";
 import { useRouter } from "expo-router";
+import { useT } from "@/i18n/LanguageContext";
 
 interface MenuScreenProps {
     topPad: number;
@@ -15,31 +16,25 @@ interface MenuScreenProps {
 export function MenuScreen({ topPad, bottomPad, bestScore, onPlay }: MenuScreenProps) {
     const router = useRouter();
     const [showHowTo, setShowHowTo] = useState(false);
+    const t = useT();
 
     return (
         <View style={[styles.container, { paddingTop: topPad + 20, paddingBottom: bottomPad + 20 }]}>
-            {/* Top Bar */}
             <View style={styles.menuTopBar}>
                 <View style={styles.menuBadge}>
                     <Ionicons name="flash" size={18} color={COLORS.mint} />
-                    <Text style={styles.menuBadgeText}>REFLEXS GAMİNG</Text>
+                    <Text style={styles.menuBadgeText}>{t.menuBadge}</Text>
                 </View>
                 <View style={styles.menuTopActions}>
                     <Pressable
-                        style={({ pressed }) => [
-                            styles.menuIconButton,
-                            pressed && { opacity: 0.6 },
-                        ]}
+                        style={({ pressed }) => [styles.menuIconButton, pressed && { opacity: 0.6 }]}
                         onPress={() => router.push("/stats" as any)}
                         hitSlop={8}
                     >
                         <Ionicons name="stats-chart" size={18} color={COLORS.gray} />
                     </Pressable>
                     <Pressable
-                        style={({ pressed }) => [
-                            styles.menuIconButton,
-                            pressed && { opacity: 0.6 },
-                        ]}
+                        style={({ pressed }) => [styles.menuIconButton, pressed && { opacity: 0.6 }]}
                         onPress={() => router.push("/settings" as any)}
                         hitSlop={8}
                     >
@@ -48,26 +43,21 @@ export function MenuScreen({ topPad, bottomPad, bestScore, onPlay }: MenuScreenP
                 </View>
             </View>
 
-            {/* Center Title */}
             <View style={styles.menuCenter}>
-                <Text style={styles.menuTitle}>TEK TUŞ</Text>
-                <Text style={styles.menuSubtitle}>MATEMATİK</Text>
+                <Text style={styles.menuTitle}>{t.menuTitle}</Text>
+                <Text style={styles.menuSubtitle}>{t.menuSubtitle}</Text>
                 <View style={styles.menuDivider} />
-                <Text style={styles.menuTagline}>Kural var. Süre var. Hata yok.</Text>
+                <Text style={styles.menuTagline}>{t.menuTagline}</Text>
             </View>
 
-            {/* Best Score Card */}
             <View style={styles.menuActions}>
                 {bestScore > 0 && (
-                    <Pressable
-                        style={styles.bestScoreCard}
-                        onPress={() => router.push("/stats" as any)}
-                    >
+                    <Pressable style={styles.bestScoreCard} onPress={() => router.push("/stats" as any)}>
                         <View style={styles.bestScoreIconWrap}>
                             <Ionicons name="trophy" size={24} color={COLORS.orange} />
                         </View>
                         <View style={styles.bestScoreInfo}>
-                            <Text style={styles.bestScoreLabel}>EN İYİ SKOR</Text>
+                            <Text style={styles.bestScoreLabel}>{t.bestScoreLabel}</Text>
                             <Text style={styles.bestScoreValue}>{bestScore}</Text>
                         </View>
                         <Feather name="chevron-right" size={18} color={COLORS.gray + "60"} />
@@ -75,29 +65,23 @@ export function MenuScreen({ topPad, bottomPad, bestScore, onPlay }: MenuScreenP
                 )}
 
                 <Pressable
-                    style={({ pressed }) => [
-                        styles.playButton,
-                        pressed && styles.playButtonPressed,
-                    ]}
+                    style={({ pressed }) => [styles.playButton, pressed && styles.playButtonPressed]}
                     onPress={onPlay}
                     accessibilityRole="button"
-                    accessibilityLabel="Oyunu Başlat"
+                    accessibilityLabel={t.playAccessibility}
                 >
-                    <Text style={styles.playButtonText}>OYNA</Text>
+                    <Text style={styles.playButtonText}>{t.play}</Text>
                     <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
                 </Pressable>
 
                 <Pressable
-                    style={({ pressed }) => [
-                        styles.howToButton,
-                        pressed && { opacity: 0.6 },
-                    ]}
+                    style={({ pressed }) => [styles.howToButton, pressed && { opacity: 0.6 }]}
                     onPress={() => setShowHowTo(true)}
                     accessibilityRole="button"
-                    accessibilityLabel="Nasıl Oynanır"
+                    accessibilityLabel={t.howToPlayAccessibility}
                 >
                     <Feather name="help-circle" size={16} color={COLORS.gray} />
-                    <Text style={styles.howToButtonText}>NASIL OYNANIR?</Text>
+                    <Text style={styles.howToButtonText}>{t.howToPlay}</Text>
                 </Pressable>
             </View>
 

@@ -38,7 +38,7 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
     try {
       await reloadAppAsync();
     } catch (restartError) {
-      console.error("Failed to restart app:", restartError);
+      if (__DEV__) console.error("Failed to restart app:", restartError);
       resetError();
     }
   };
@@ -79,11 +79,11 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
 
       <View style={styles.content}>
         <Text style={[styles.title, { color: theme.text }]}>
-          Something went wrong
+          Bir sorun oluştu
         </Text>
 
         <Text style={[styles.message, { color: theme.textSecondary }]}>
-          Please reload the app to continue.
+          Devam etmek için uygulamayı yeniden yükleyin.
         </Text>
 
         <Pressable
@@ -98,7 +98,7 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
           ]}
         >
           <Text style={[styles.buttonText, { color: theme.buttonText }]}>
-            Try Again
+            Tekrar Dene
           </Text>
         </Pressable>
       </View>

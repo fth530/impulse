@@ -146,7 +146,7 @@ export default function GameScreen() {
           score={game.score}
           bestScore={game.bestScore}
           currentStreak={game.currentStreak}
-          ruleLabel={game.ruleLabel}
+          ruleId={game.ruleId}
           ruleFlash={game.ruleFlash}
           equation={game.equation}
           ruleMatches={game.ruleMatches}

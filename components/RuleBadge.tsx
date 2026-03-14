@@ -9,6 +9,7 @@ import Animated, {
     interpolateColor,
 } from "react-native-reanimated";
 import { COLORS } from "@/constants/colors";
+import { useT } from "@/i18n/LanguageContext";
 
 interface RuleBadgeProps {
     label: string;
@@ -16,6 +17,7 @@ interface RuleBadgeProps {
 }
 
 export function RuleBadge({ label, flash }: RuleBadgeProps) {
+    const t = useT();
     const flashValue = useSharedValue(0);
 
     useEffect(() => {
@@ -62,7 +64,7 @@ export function RuleBadge({ label, flash }: RuleBadgeProps) {
     return (
         <Animated.View style={[ruleStyles.badge, animatedContainerStyle]}>
             <Animated.Text style={[ruleStyles.kural, animatedTextStyle]}>
-                KURAL
+                {t.ruleBadgeLabel}
             </Animated.Text>
             <Animated.Text style={[ruleStyles.label, animatedTextStyle]}>
                 {label}

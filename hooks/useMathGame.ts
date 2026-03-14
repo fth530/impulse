@@ -460,6 +460,7 @@ export function useMathGame() {
     equation,
     rule,
     ruleLabel: rule.label,
+    ruleId: rule.id,
     ruleMatches,
     ruleFlash,
     timerDuration,

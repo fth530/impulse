@@ -56,9 +56,7 @@ export function useGameAudio(enabled: boolean) {
             ref.current.sfx = ref.current.sfx.filter((s) => s !== sound);
           }
         });
-      } catch (e) {
-        console.warn("[Audio] playSfx error:", e);
-      }
+      } catch {}
     },
     [],
   );
@@ -78,9 +76,7 @@ export function useGameAudio(enabled: boolean) {
       });
 
       ref.current.bgm = sound;
-    } catch (e) {
-      console.warn("[Audio] startBgm error:", e);
-    }
+    } catch {}
   }, []);
 
   const stopBgm = useCallback(async () => {
