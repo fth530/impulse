@@ -14,6 +14,7 @@ import { useMathGame } from "@/hooks/useMathGame";
 import { useGameHistory } from "@/hooks/useGameHistory";
 import { useGameAudio } from "@/hooks/useGameAudio";
 import { useSettings } from "@/hooks/useSettings";
+import { useRatingPrompt } from "@/hooks/useRatingPrompt";
 import { COLORS } from "@/constants/colors";
 
 // Screen Components
@@ -27,6 +28,7 @@ export default function GameScreen() {
   const { addRecord } = useGameHistory();
   const { settings } = useSettings();
   const audio = useGameAudio(settings.soundEnabled);
+  const rating = useRatingPrompt();
 
   const prevGameState = useRef(game.gameState);
   const prevScore = useRef(0);
@@ -54,6 +56,7 @@ export default function GameScreen() {
         easing: Easing.out(Easing.quad),
       });
       audio.startBgm();
+      rating.trackSession();
     } else if (prev === "playing" && game.gameState === "gameover") {
       shakeX.value = withSequence(
         withTiming(12, { duration: 50 }),
@@ -68,6 +71,15 @@ export default function GameScreen() {
         withTiming(1, { duration: 300 }),
       );
       audio.playGameOver();
+
+      // Track personal best for rating prompt
+      if (game.isNewRecord) {
+        rating.trackPersonalBest();
+      }
+      // Check if we should show rating prompt (after game over, positive moment)
+      if (game.score >= 10) {
+        rating.checkAndPrompt();
+      }
 
       if (game.gameEndData) {
         addRecord({

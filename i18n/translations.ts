@@ -109,6 +109,9 @@ export interface Translations {
   howToExample: string;
   howToExampleText: string;
 
+  // Share
+  shareScore: string;
+
   // Error
   errorTitle: string;
   errorMessage: string;
@@ -203,6 +206,8 @@ const en: Translations = {
   howToExample: "Example",
   howToExampleText: "If the rule is EVEN NUMBER and the equation is 3 + 5 (result = 8, even) → TAP!",
 
+  shareScore: "SHARE SCORE",
+
   errorTitle: "Something went wrong",
   errorMessage: "Please reload the app to continue.",
   tryAgain: "Try Again",
@@ -294,6 +299,8 @@ const tr: Translations = {
   howToRule4Desc: "Her doğru hamlede süre kısalır. Ne kadar dayanabilirsin?",
   howToExample: "Örnek",
   howToExampleText: "Kural ÇİFT SAYI ise ve denklem 3 + 5 ise (sonuç = 8, çift) → DOKUN!",
+
+  shareScore: "SKORU PAYLAŞ",
 
   errorTitle: "Bir sorun oluştu",
   errorMessage: "Devam etmek için uygulamayı yeniden yükleyin.",
@@ -387,6 +394,8 @@ const de: Translations = {
   howToExample: "Beispiel",
   howToExampleText: "Regel GERADE ZAHL, Gleichung 3 + 5 (Ergebnis = 8, gerade) → TIPPEN!",
 
+  shareScore: "PUNKTZAHL TEILEN",
+
   errorTitle: "Etwas ist schiefgelaufen",
   errorMessage: "Bitte lade die App neu.",
   tryAgain: "Erneut versuchen",
@@ -478,6 +487,8 @@ const pt: Translations = {
   howToRule4Desc: "Cada acerto diminui o timer. Quanto tempo você aguenta?",
   howToExample: "Exemplo",
   howToExampleText: "Regra NÚMERO PAR, equação 3 + 5 (resultado = 8, par) → TOQUE!",
+
+  shareScore: "COMPARTILHAR",
 
   errorTitle: "Algo deu errado",
   errorMessage: "Recarregue o app para continuar.",
@@ -571,6 +582,8 @@ const es: Translations = {
   howToExample: "Ejemplo",
   howToExampleText: "Regla NÚMERO PAR, ecuación 3 + 5 (resultado = 8, par) → ¡TOCA!",
 
+  shareScore: "COMPARTIR",
+
   errorTitle: "Algo salió mal",
   errorMessage: "Recarga la app para continuar.",
   tryAgain: "Reintentar",
@@ -662,6 +675,8 @@ const fr: Translations = {
   howToRule4Desc: "Chaque bonne réponse raccourcit le timer. Combien de temps tiendras-tu ?",
   howToExample: "Exemple",
   howToExampleText: "Règle NOMBRE PAIR, équation 3 + 5 (résultat = 8, pair) → TOUCHE !",
+
+  shareScore: "PARTAGER",
 
   errorTitle: "Un problème est survenu",
   errorMessage: "Rechargez l'app pour continuer.",
@@ -755,6 +770,8 @@ const ja: Translations = {
   howToExample: "例",
   howToExampleText: "ルール「偶数」、式 3 + 5（答え = 8、偶数）→ タップ！",
 
+  shareScore: "スコアを共有",
+
   errorTitle: "問題が発生しました",
   errorMessage: "アプリを再読み込みしてください。",
   tryAgain: "再試行",
@@ -846,6 +863,8 @@ const ko: Translations = {
   howToRule4Desc: "정답마다 타이머가 짧아집니다. 얼마나 버틸 수 있나요?",
   howToExample: "예시",
   howToExampleText: "규칙 「짝수」, 식 3 + 5 (답 = 8, 짝수) → 탭!",
+
+  shareScore: "점수 공유",
 
   errorTitle: "문제가 발생했습니다",
   errorMessage: "앱을 다시 로드해주세요.",

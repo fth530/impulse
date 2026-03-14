@@ -5,6 +5,7 @@ import { COLORS } from "@/constants/colors";
 import { GameEndData } from "@/hooks/useMathGame";
 import { useT } from "@/i18n/LanguageContext";
 import { getDifficultyLabelTranslated } from "@/i18n/ruleLabels";
+import { useShareScore } from "@/hooks/useShareScore";
 
 interface GameOverScreenProps {
     score: number;
@@ -28,6 +29,7 @@ export function GameOverScreen({
     bottomPad,
 }: GameOverScreenProps) {
     const t = useT();
+    const { shareScore } = useShareScore();
     const durationSecs = gameEndData ? Math.floor(gameEndData.durationMs / 1000) : 0;
     const durationStr =
         durationSecs >= 60
@@ -109,6 +111,15 @@ export function GameOverScreen({
                 </Pressable>
 
                 <Pressable
+                    style={({ pressed }) => [styles.shareButton, pressed && { opacity: 0.7 }]}
+                    onPress={() => shareScore(score)}
+                    accessibilityRole="button"
+                >
+                    <Feather name="share-2" size={16} color={COLORS.mint} />
+                    <Text style={styles.shareButtonText}>{t.shareScore}</Text>
+                </Pressable>
+
+                <Pressable
                     style={({ pressed }) => [styles.menuButtonSmall, pressed && { opacity: 0.6 }]}
                     onPress={onMenu}
                     accessibilityRole="button"
@@ -141,6 +152,8 @@ const styles = StyleSheet.create({
     restartButton: { flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: COLORS.mint, paddingHorizontal: 40, paddingVertical: 18, borderRadius: 50, shadowColor: COLORS.mint, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 16, elevation: 8, width: "100%", justifyContent: "center" },
     restartButtonPressed: { transform: [{ scale: 0.96 }], shadowOpacity: 0.1 },
     restartButtonText: { fontSize: 17, fontFamily: "Inter_700Bold", color: "#FFFFFF", letterSpacing: 1.5 },
+    shareButton: { flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: COLORS.mint + "12", paddingHorizontal: 24, paddingVertical: 14, borderRadius: 50, borderWidth: 1, borderColor: COLORS.mint + "30", width: "100%", justifyContent: "center" },
+    shareButtonText: { fontSize: 14, fontFamily: "Inter_600SemiBold", color: COLORS.mint, letterSpacing: 1 },
     menuButtonSmall: { flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 12 },
     menuButtonSmallText: { fontSize: 14, fontFamily: "Inter_500Medium", color: COLORS.gray, letterSpacing: 1 },
 });
