@@ -109,6 +109,14 @@ export interface Translations {
   howToExample: string;
   howToExampleText: string;
 
+  // Daily Challenge
+  dailyChallenge: string;
+  dailyBest: string;
+  dayStreak: string;
+  daysPlayed: string;
+  playedToday: string;
+  notPlayedToday: string;
+
   // Share
   shareScore: string;
 
@@ -206,6 +214,13 @@ const en: Translations = {
   howToExample: "Example",
   howToExampleText: "If the rule is EVEN NUMBER and the equation is 3 + 5 (result = 8, even) → TAP!",
 
+  dailyChallenge: "DAILY CHALLENGE",
+  dailyBest: "Today's Best",
+  dayStreak: "Day Streak",
+  daysPlayed: "Days Played",
+  playedToday: "Completed",
+  notPlayedToday: "Not played yet",
+
   shareScore: "SHARE SCORE",
 
   errorTitle: "Something went wrong",
@@ -299,6 +314,13 @@ const tr: Translations = {
   howToRule4Desc: "Her doğru hamlede süre kısalır. Ne kadar dayanabilirsin?",
   howToExample: "Örnek",
   howToExampleText: "Kural ÇİFT SAYI ise ve denklem 3 + 5 ise (sonuç = 8, çift) → DOKUN!",
+
+  dailyChallenge: "GÜNLÜK MEYDAN OKUMA",
+  dailyBest: "Bugünün En İyisi",
+  dayStreak: "Gün Serisi",
+  daysPlayed: "Oynanan Gün",
+  playedToday: "Tamamlandı",
+  notPlayedToday: "Henüz oynanmadı",
 
   shareScore: "SKORU PAYLAŞ",
 
@@ -394,6 +416,13 @@ const de: Translations = {
   howToExample: "Beispiel",
   howToExampleText: "Regel GERADE ZAHL, Gleichung 3 + 5 (Ergebnis = 8, gerade) → TIPPEN!",
 
+  dailyChallenge: "TÄGLICHE HERAUSFORDERUNG",
+  dailyBest: "Tageshöchstwert",
+  dayStreak: "Tage-Serie",
+  daysPlayed: "Gespielte Tage",
+  playedToday: "Abgeschlossen",
+  notPlayedToday: "Noch nicht gespielt",
+
   shareScore: "PUNKTZAHL TEILEN",
 
   errorTitle: "Etwas ist schiefgelaufen",
@@ -487,6 +516,13 @@ const pt: Translations = {
   howToRule4Desc: "Cada acerto diminui o timer. Quanto tempo você aguenta?",
   howToExample: "Exemplo",
   howToExampleText: "Regra NÚMERO PAR, equação 3 + 5 (resultado = 8, par) → TOQUE!",
+
+  dailyChallenge: "DESAFIO DIÁRIO",
+  dailyBest: "Melhor de Hoje",
+  dayStreak: "Dias Seguidos",
+  daysPlayed: "Dias Jogados",
+  playedToday: "Concluído",
+  notPlayedToday: "Ainda não jogou",
 
   shareScore: "COMPARTILHAR",
 
@@ -582,6 +618,13 @@ const es: Translations = {
   howToExample: "Ejemplo",
   howToExampleText: "Regla NÚMERO PAR, ecuación 3 + 5 (resultado = 8, par) → ¡TOCA!",
 
+  dailyChallenge: "DESAFÍO DIARIO",
+  dailyBest: "Mejor de Hoy",
+  dayStreak: "Días Seguidos",
+  daysPlayed: "Días Jugados",
+  playedToday: "Completado",
+  notPlayedToday: "Aún no jugado",
+
   shareScore: "COMPARTIR",
 
   errorTitle: "Algo salió mal",
@@ -675,6 +718,13 @@ const fr: Translations = {
   howToRule4Desc: "Chaque bonne réponse raccourcit le timer. Combien de temps tiendras-tu ?",
   howToExample: "Exemple",
   howToExampleText: "Règle NOMBRE PAIR, équation 3 + 5 (résultat = 8, pair) → TOUCHE !",
+
+  dailyChallenge: "DÉFI QUOTIDIEN",
+  dailyBest: "Meilleur du Jour",
+  dayStreak: "Jours Consécutifs",
+  daysPlayed: "Jours Joués",
+  playedToday: "Terminé",
+  notPlayedToday: "Pas encore joué",
 
   shareScore: "PARTAGER",
 
@@ -770,6 +820,13 @@ const ja: Translations = {
   howToExample: "例",
   howToExampleText: "ルール「偶数」、式 3 + 5（答え = 8、偶数）→ タップ！",
 
+  dailyChallenge: "デイリーチャレンジ",
+  dailyBest: "今日のベスト",
+  dayStreak: "連続日数",
+  daysPlayed: "プレイ日数",
+  playedToday: "完了",
+  notPlayedToday: "未プレイ",
+
   shareScore: "スコアを共有",
 
   errorTitle: "問題が発生しました",
@@ -863,6 +920,13 @@ const ko: Translations = {
   howToRule4Desc: "정답마다 타이머가 짧아집니다. 얼마나 버틸 수 있나요?",
   howToExample: "예시",
   howToExampleText: "규칙 「짝수」, 식 3 + 5 (답 = 8, 짝수) → 탭!",
+
+  dailyChallenge: "일일 챌린지",
+  dailyBest: "오늘의 최고",
+  dayStreak: "연속 일수",
+  daysPlayed: "플레이 일수",
+  playedToday: "완료",
+  notPlayedToday: "아직 미플레이",
 
   shareScore: "점수 공유",
 

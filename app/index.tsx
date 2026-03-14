@@ -15,6 +15,7 @@ import { useGameHistory } from "@/hooks/useGameHistory";
 import { useGameAudio } from "@/hooks/useGameAudio";
 import { useSettings } from "@/hooks/useSettings";
 import { useRatingPrompt } from "@/hooks/useRatingPrompt";
+import { useDailyChallenge } from "@/hooks/useDailyChallenge";
 import { COLORS } from "@/constants/colors";
 
 // Screen Components
@@ -29,6 +30,7 @@ export default function GameScreen() {
   const { settings } = useSettings();
   const audio = useGameAudio(settings.soundEnabled);
   const rating = useRatingPrompt();
+  const daily = useDailyChallenge();
 
   const prevGameState = useRef(game.gameState);
   const prevScore = useRef(0);
@@ -80,6 +82,9 @@ export default function GameScreen() {
       if (game.score >= 10) {
         rating.checkAndPrompt();
       }
+
+      // Record daily challenge
+      daily.recordDailyScore(game.score);
 
       if (game.gameEndData) {
         addRecord({
