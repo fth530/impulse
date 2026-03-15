@@ -1,306 +1,714 @@
 ==============================================================
   MathPulse (eski adı: IMPULSE)
-  App Store Red Yememek İçin Yapılan Tüm Düzeltmeler
-  Tarih: 14 Mart 2026
+  App Store Yayın Rehberi — Tüm Yapılanlar
+  Diğer projeler için de kullanılabilir referans doküman
+  Son güncelleme: 15 Mart 2026
 ==============================================================
 
 
-[1] KRİTİK DÜZELTMELER (Yapılmasaydı Kesin Red Gelirdi)
+██████████████████████████████████████████████████████████████
+  BÖLÜM A: APP STORE'DAN RED YEMEMEK İÇİN YAPILANLAR
+██████████████████████████████████████████████████████████████
+
+
+[A1] KRİTİK DÜZELTMELER (Yapılmazsa Kesin Red Gelir)
 --------------------------------------------------------------
 
-1.1 Bundle Identifier Düzeltildi
-    Eski: "com.myapp" (placeholder)
-    Yeni: "com.corut.mathpulse"
-    Dosya: app.json
+A1.1 Bundle Identifier
+     Placeholder ("com.myapp") kesinlikle değiştirilmeli.
+     Format: com.şirketadı.uygulamaadı
+     Örnek: "com.corut.mathpulse"
+     Dosya: app.json → ios.bundleIdentifier + android.package
+     NOT: Bir kez yayınladıktan sonra değiştirilemez.
 
-1.2 Gizlilik Politikası Oluşturuldu
-    - PRIVACY_POLICY.md dosyası eklendi
-    - İletişim e-postası: mathpulse.app@gmail.com
-    - Veri toplamadığımız açıkça belirtildi
-    - COPPA uyumlu (çocuk verisi toplanmıyor)
-    - KVKK/GDPR uyumlu
+A1.2 Gizlilik Politikası (Privacy Policy)
+     Apple zorunlu tutuyor — olmadan submit edilemez.
+     İçermesi gerekenler:
+     - Hangi veriler toplanıyor (veya toplanmıyor)
+     - Veriler nasıl kullanılıyor
+     - Üçüncü taraf paylaşımı var mı
+     - İletişim bilgisi (gerçek e-posta)
+     - COPPA uyumu (çocuk verisi)
+     - KVKK/GDPR uyumu (AB için)
+     Nerede host edilir: GitHub Pages, Notion, kendi site
+     Uygulama içinden erişilebilir olmalı (Ayarlar ekranında link)
 
-1.3 Gizlilik Politikası Uygulama İçinden Erişilebilir
-    - Ayarlar ekranına "Gizlilik Politikası" / "Privacy Policy" linki eklendi
-    - Tıklayınca tarayıcıda açılıyor
-    - Apple bu linkin uygulama içinde olmasını zorunlu tutuyor
+A1.3 Support URL
+     Apple çalışan bir support URL istiyor.
+     mailto: linki kabul etmiyor — gerçek web URL'i gerekli.
+     Önerilen: GitHub repo URL'i veya basit landing page
+     Uygulama içinden de erişilebilir olmalı (Ayarlar ekranında)
 
-1.4 Destek & İletişim Linki Eklendi
-    - Ayarlar ekranına "Destek & İletişim" / "Support & Contact" eklendi
-    - Mail adresiyle doğrudan iletişim
-    - Apple, çalışan bir support URL istiyor
+A1.4 Slug, Scheme, Origin Temizliği
+     Development ortamından kalan ayarlar temizlenmeli:
+     - slug: gerçek uygulama adı
+     - scheme: gerçek uygulama adı
+     - Replit/development origin'leri kaldırılmalı
 
-1.5 Replit Origin Kaldırıldı
-    Eski: app.json'da "origin": "https://replit.com/"
-    Yeni: Kaldırıldı
+A1.5 iOS Build Number
+     app.json → ios.buildNumber: "1"
+     Her yeni App Store submission'da artırılmalı (2, 3, 4...)
+     version (1.0.0) ile buildNumber (1) farklı şeyler.
 
-1.6 Slug ve Scheme Düzeltildi
-    Eski: "slug": "my-app", "scheme": "myapp"
-    Yeni: "slug": "mathpulse", "scheme": "mathpulse"
+A1.6 Şifreleme Beyanı
+     app.json → ios.infoPlist:
+     "ITSAppUsesNonExemptEncryption": false
+     Bu olmazsa App Store Connect her seferinde manuel sorar.
+     Eğer özel şifreleme kullanıyorsan true yap ve belge yükle.
 
-1.7 iOS Build Number Eklendi
-    "buildNumber": "1" eklendi
+A1.7 İsim Çakışması Kontrolü
+     App Store'da aynı isimde popüler uygulama var mı kontrol et.
+     Varsa isim değiştir — yoksa:
+     - Arama sonuçlarında kaybolursun
+     - Apple "copycat" red'i verebilir
+     - Organik trafik rakibe gider
+     Araç: App Store'da manuel arama + AppTweak/ASOMobile
 
-1.8 Şifreleme Beyanı Eklendi
-    "ITSAppUsesNonExemptEncryption": false
 
-
-[2] İSİM DEĞİŞİKLİĞİ: IMPULSE → MATHPULSE
+[A2] CRASH / BUG ÖNLEMELERİ (Guideline 2.1)
 --------------------------------------------------------------
 
-Neden değiştirildi:
-    App Store'da "Impulse - Brain Training" adında 4.7 yıldızlı,
-    5M+ indirmeli bir uygulama zaten var. Aynı isimle çıkmak:
-    - Arama sonuçlarında kaybolmaya
-    - Apple'dan "copycat" red'i almaya
-    - Organik trafiğin rakibe gitmesine neden olurdu
+Apple başvuruların %40+'ını "App Completeness" nedeniyle reddediyor.
 
-Değiştirilen dosyalar ve alanlar:
-    - app.json: name, slug, scheme, bundleIdentifier, package
-    - package.json: name
-    - package-lock.json: name (otomatik)
-    - settings.tsx: footer, mail adresi, GitHub URL
-    - PRIVACY_POLICY.md: tüm Impulse referansları
-    - REVIEW_NOTES.md: tüm IMPULSE referansları
-    - ASO_STRATEJISI.md: tüm referanslar
-    - i18n/translations.ts: 8 dilde menuBadge
+A2.1 ErrorBoundary
+     Tüm uygulama ErrorBoundary ile sarılmalı.
+     Crash yerine kullanıcıya hata ekranı gösterilmeli.
+     "Tekrar Dene" butonu ile yeniden yükleme imkanı.
+
+A2.2 AppState Listener (Arka Plan Yönetimi)
+     Uygulama arka plana atılınca:
+     - Aktif işlemler durdurulmalı (timer, oyun, ses)
+     - State korunmalı veya güvenli şekilde sıfırlanmalı
+     - Geri dönüşte crash olmamalı
+
+A2.3 Ses Sistemi Güvenliği
+     - Tüm audio işlemleri try/catch ile sarılmalı
+     - staysActiveInBackground: false
+     - Sound enabled/disabled değiştiğinde mevcut sesler durdurulmalı
+     - Ses cleanup düzgün yapılmalı (memory leak önleme)
+     - Headphone takma/çıkarma durumları test edilmeli
+
+A2.4 console.log/warn/error Temizliği
+     Production build'de gereksiz log olmamalı.
+     console.warn → kaldır veya __DEV__ ile sar
+     console.error → __DEV__ ile sar
+
+A2.5 API/Network Crash Önleme
+     Backend kullanılmıyorsa API kodu kaldırılmalı veya
+     fallback eklenmeli. Env variable yoksa crash olmamalı.
+
+A2.6 Test Edilmesi Gereken Senaryolar
+     - İlk açılışta beyaz ekran var mı?
+     - İnternet yokken crash oluyor mu?
+     - Arka plan → ön plan geçişi
+     - Telefon kilitle / aç
+     - Silent mode açık/kapalı
+     - Kulaklık tak/çıkar
+     - Bildirim geldiğinde
+     - Farklı iPhone boyutlarında UI taşması
+     - 20+ kez aç-kapa testi
 
 
-[3] CRASH / BUG ÖNLEMELERİ (Guideline 2.1)
+[A3] MİNİMUM FONKSİYONALİTE (Guideline 4.2)
 --------------------------------------------------------------
 
-3.1 API Client Crash Riski Giderildi
-    Eski: query-client.ts'de EXPO_PUBLIC_DOMAIN yoksa crash yapıyordu
-    Yeni: Tüm API/fetch kodu kaldırıldı, sadece temiz QueryClient kaldı
+Apple "yeterli değer sunmuyor" diye basit uygulamaları reddedebilir.
+En az 4-6 özellik olmalı. Sadece 1-2 ekran yetmez.
 
-3.2 ErrorBoundary Mevcut
-    Tüm uygulama ErrorBoundary ile sarılı.
-    Beklenmedik hatalarda "Tekrar Dene" butonu ile yeniden yükleme.
+Olması Gerekenler:
+     - 5+ ekran (menü, oyun, sonuç, istatistik, ayarlar)
+     - Zorluk kademeleri (kolay → zor)
+     - İlerleme takibi (skor geçmişi, istatistikler)
+     - Streak/combo sistemi (geri gelme motivasyonu)
+     - Ses efektleri + haptic feedback
+     - Nasıl oynanır açıklaması (onboarding)
+     - Ayarlar ekranı (ses, titreşim, dil)
+     - Animasyonlu geçişler (profesyonel his)
+     - Offline çalışma (internet gerektirmemeli)
+     - Daily Challenge (günlük geri gelme nedeni)
 
-3.3 AppState Listener (Arka Plan Yönetimi)
-    Oyun sırasında uygulama arka plana atılırsa:
-    - Oyun otomatik bitiyor (hile önleme)
-    - Timer'lar temizleniyor
-    - Ses duruyor
-
-3.4 Ses Sistemi Hata Yönetimi
-    - try/catch ile sarılı
-    - staysActiveInBackground: false
-    - Ses cleanup düzgün (memory leak yok)
-
-3.5 console.log/warn/error Temizlendi
-    - Production build'de gereksiz log yok
+Apple'ın görmek istediği: "Basit ama polished ve değer katan uygulama"
 
 
-[4] MİNİMUM FONKSİYONALİTE (Guideline 4.2)
+[A4] DİL TUTARLILIĞI
 --------------------------------------------------------------
 
-4.1 Çoklu Ekran Yapısı (6 Ekran)
-    - Dil seçim ekranı (onboarding, bayraklı, 8 dil)
-    - Menü ekranı (profesyonel best score kartı)
-    - Oyun ekranı (kural, denklem, timer, streak)
-    - Game Over ekranı (2x2 istatistik grid)
-    - İstatistikler ekranı (son 20 oyun, ortalama skor, isabet oranı)
-    - Ayarlar ekranı (ses, titreşim, dil, gizlilik, destek, veri sıfırlama)
+Apple tutarsız dil kullanımını sorun edebilir.
+Uygulama tek dilde ise tüm ekranlar o dilde olmalı.
+Çok dilli ise i18n altyapısı ile yönetilmeli.
 
-4.2 Dinamik Zorluk Sistemi (4 Kademe)
-    - Başlangıç (0-10): Çift/tek, toplama-çıkarma
-    - Orta (11-30): Asal sayılar, büyüklük karşılaştırmaları
-    - Zor (31-60): Çarpma, 5/0 ile biten, 3'e bölünen
-    - Uzman (60+): Bölme, parantezli işlemler
-    - Süre 2500ms → 700ms'ye kadar düşüyor
-
-4.3 Streak / Combo Sistemi
-    - 2+ streak'te görsel badge
-    - 5+ turuncu, 10+ kırmızı ateş animasyonu
-    - 5, 10, 15... streak'te özel ses efekti
-
-4.4 İstatistik ve İlerleme Takibi
-    - Son 20 oyun kaydı
-    - Ortalama skor, en iyi skor, en uzun seri
-    - İsabet oranı progress bar
-
-4.5 Ses Sistemi (4 ses efekti)
-    - Oyun başlangıç, doğru cevap, streak, game over
-
-4.6 Haptic Feedback
-    - Doğru/yanlış cevapta farklı titreşim
-
-4.7 Nasıl Oynanır (Onboarding)
-    - HowToPlayModal, 4 kural açıklaması + örnek
-
-4.8 Animasyonlu Geçişler
-    - fade, scale, shake — 60/120 FPS Reanimated
+Kontrol edilmesi gerekenler:
+     - Error ekranları (ErrorFallback)
+     - 404 / Not Found ekranı
+     - Alert/confirm mesajları
+     - Accessibility label'lar
+     - Placeholder textler
 
 
-[5] 8 DİL DESTEĞİ (i18n) — GLOBAL PAZAR
+[A5] METADATA UYUMU (Guideline 2.3)
 --------------------------------------------------------------
 
-Neden eklendi:
-    - Rakip analizi gösterdi ki matematik/beyin eğitimi pazarı
-      global, çok dilli uygulamalar %20-35 daha iyi retention alıyor
-    - "Impulse (Brain Training)" rakibi 5 dilde, biz 8 dilde çıkıyoruz
+A5.1 İsim Tutarlılığı
+     app.json, package.json, uygulama içi footer,
+     privacy policy — hepsinde aynı isim olmalı.
 
-5.1 Desteklenen Diller (Bayraklı Seçim)
-    🇺🇸 English (varsayılan)
-    🇹🇷 Türkçe
-    🇩🇪 Deutsch (Almanya — Avrupa lideri, %5.07 pazar payı)
-    🇧🇷 Português (Brezilya — indirme hacminde dünya 2.'si)
-    🇪🇸 Español (İspanya + Latin Amerika — 500M+ konuşan)
-    🇫🇷 Français (Fransa + Kanada)
-    🇯🇵 日本語 (Japonya — %75 iOS, en yüksek ARPU)
-    🇰🇷 한국어 (Güney Kore — %75 öğrenci özel ders alıyor)
+A5.2 Versiyon Bilgisi
+     version + buildNumber doğru ayarlanmalı.
+     Ayarlar ekranında gösterilmeli.
 
-5.2 Teknik Altyapı
-    - i18n/translations.ts: 76+ string, 8 dilde tam çeviri
-    - i18n/LanguageContext.tsx: React Context + useT() hook
-    - i18n/ruleLabels.ts: Kural ve zorluk çevirileri (dinamik)
-    - AsyncStorage ile kalıcı dil tercihi
+A5.3 Review Notes
+     App Store Connect → App Review Information → Notes
+     İçermeli:
+     - Login gerekip gerekmediği
+     - Offline çalışıp çalışmadığı
+     - IAP ve reklam durumu
+     - Veri toplama durumu
+     - Özel test talimatları
 
-5.3 Onboarding Dil Seçim Ekranı
-    - İlk açılışta bayraklı dil seçim ekranı
-    - Kullanıcı dilini seçer, uygulama anında güncellenir
-    - Ayarlar'dan sonradan değiştirilebilir
+A5.4 Screenshot'lar
+     - Gerçek uygulamadan alınmalı (sahte/mockup değil)
+     - Doğru boyut: 1284x2778 veya 1242x2688
+     - En az 3, ideal 6 screenshot
+     - Her locale için ayrı set (lokalize metinlerle)
 
-5.4 Çevrilen Alanlar (her dilde)
-    - Menü ekranı (title, tagline, butonlar)
-    - Oyun ekranı (SKOR, EN İYİ, DOKUN!, BEKLE, kural badge)
-    - Oyun kuralları (ÇİFT SAYI, TEK SAYI, ASAL SAYI, vb.)
-    - Zorluk seviyeleri (BAŞLANGIÇ, ORTA, ZOR, UZMAN)
-    - Game Over ekranı (istatistikler, butonlar)
-    - İstatistikler ekranı (tüm label'lar)
-    - Ayarlar ekranı (tüm ayar isimleri ve açıklamaları)
-    - Nasıl Oynanır modal (4 kural + örnek)
-    - Hata ekranları (ErrorFallback, 404)
+A5.5 Açıklama Metni
+     - Gerçek özellikleri anlatmalı (abartılı vaat yok)
+     - İlk 3 satır en kritik (Read More öncesi görünür)
+     - Keyword'ler doğal şekilde yerleştirilmeli
+
+A5.6 Kategori
+     Education kategorisi math/brain training için önerilen.
+     Games'den daha az rekabet + algoritmik avantaj.
+     Secondary: Games > Puzzle veya Trivia
 
 
-[6] ASO STRATEJİSİ (App Store Optimization)
+[A6] iPad ve DİĞER PLATFORM UYUMU
 --------------------------------------------------------------
 
-6.1 Global Rakip Analizi Yapıldı
-    Rakipler: Impulse Brain Training (4.7★, 5M+),
-    Lumosity (4.4★, 100M+), Math Brain Booster (4.0★, 1M+),
-    Elevate (4.7★, 50M+), King of Math (4.5★, 5M+)
-
-6.2 MathPulse Farklılaşma Noktaları
-    - Kural bazlı refleks mekanigi (rakiplerde yok)
-    - 30 saniyelik micro-sessions
-    - 8 dil desteği lansanda (rakiplerin çoğu sadece EN)
-    - Ücretsiz, reklamsız, hesapsız
-    - Streak/combo sistemi
-
-6.3 Title/Subtitle Mimarisi (Her locale için)
-    en-US: "MathPulse: Quick Math Game" / "Brain Training & Reflex Test"
-    en-GB: "MathPulse: Quick Maths Game" / "Brain Training & Reflex Test"
-    de-DE: "MathPulse: Kopfrechnen Spiel" / "Gehirntraining & Reflex Test"
-    tr-TR: "MathPulse: Hizli Matematik" / "Beyin Egzersizi & Refleks"
-    ja-JP: "MathPulse - 計算ゲーム 脳トレ" / "脳トレ & 反射神経テスト"
-    ko-KR: "MathPulse - 수학게임 두뇌훈련" / "뇌 훈련 & 반응속도 테스트"
-    es-ES: "MathPulse: Juego Matematico" / "Entrenamiento Cerebral Rapido"
-    pt-BR: "MathPulse: Jogo Matematica" / "Treinamento Cerebral Rapido"
-
-6.4 Keyword Stratejisi (100 karakter, her locale farklı)
-    - Title'daki kelimeler Keywords'te tekrarlanmıyor
-    - Her locale için yerel keyword araştırması yapıldı
-    - Long-tail keyword'ler (düşük rekabet, yüksek dönüşüm) hedeflendi
-
-6.5 Lansman Wave Stratejisi
-    Wave 1 (Gün 0): ABD, UK, Almanya, Fransa, Japonya, G.Kore, Türkiye
-    Wave 2 (30-60 gün): İspanya/LatAm, Brezilya, Hindistan, Suudi Arabistan
-    Wave 3 (90+ gün): Endonezya, Vietnam, Filipinler, Polonya
-
-6.6 Dokümanlar
-    - ASO_STRATEJISI.md: Detaylı ASO planı
-    - MathPulse_Global_ASO_Strategy.docx: Kapsamlı rakip analizi (assets/)
+supportsTablet: false → iPhone-only yapılmalı (v1 için)
+Apple Silicon Mac → kapatılmalı (test edilmediyse)
+Apple Vision Pro → kapatılmalı (test edilmediyse)
+iPad desteği eklenecekse ayrı UI testi yapılmalı.
 
 
-[7] METADATA UYUMU (Guideline 2.3)
+[A7] GEREKSİZ BAĞIMLILIKLAR
 --------------------------------------------------------------
 
-7.1 Uygulama İsmi Tutarlı
-    Her yerde "MathPulse" / "mathpulse"
-    app.json, package.json, settings footer, privacy policy
+Kullanılmayan paketler kaldırılmalı:
+- Gereksiz izin riski (location, camera, microphone)
+- Bundle boyutu şişmesi
+- Apple "neden bu izni istiyorsun?" sorusu
 
-7.2 Versiyon Bilgisi
-    - version: 1.0.0, buildNumber: 1
-    - Ayarlar: "MathPulse v1.0.0 (Build 1)"
-
-7.3 Review Notes Hazır
-    REVIEW_NOTES.md — App Store Connect'e kopyalanacak
-    Offline, login yok, IAP yok, reklam yok belirtildi
-
-7.4 Kategori Önerisi (Doküman bazlı)
-    Primary: Education (Games değil — daha az rekabet)
-    Secondary: Games > Puzzle
+Info.plist kontrol:
+- NSCameraUsageDescription → kamera yoksa olmamalı
+- NSLocationWhenInUseUsageDescription → konum yoksa olmamalı
+- NSMicrophoneUsageDescription → mikrofon yoksa olmamalı
 
 
-[8] iPad UYUMSUZLUĞU YÖNETİLDİ
---------------------------------------------------------------
-
-supportsTablet: false — iPhone-only
-
-
-[9] GEREKSİZ BAĞIMLILIKLAR TEMİZLENDİ
---------------------------------------------------------------
-
-Kaldırılan: expo-location, expo-image-picker, expo-glass-effect
-Info.plist'te gereksiz izin yok
-
-
-[10] EAS BUILD YAPILANDIRMASI
---------------------------------------------------------------
-
-eas.json: development, preview, production profilleri
-appVersionSource: "remote", iOS distribution: "store"
-
-
-[11] GÜVENLİK ve KOD KALİTESİ
+[A8] GÜVENLİK ve KOD KALİTESİ
 --------------------------------------------------------------
 
 - TypeScript Strict Mode aktif
-- AsyncStorage + Audio hataları catch ediliyor
+- try/catch her yerde (AsyncStorage, Audio, Network)
 - ErrorBoundary tüm uygulamayı sarıyor
-- Production build'de debug/placeholder/mock yok
+- Production build'de: debug log yok, test butonu yok,
+  placeholder yok, "coming soon" yok, mock endpoint yok
 
 
-[12] APP STORE CONNECT'TE YAPILACAKLAR (KOD DIŞI)
+[A9] APP STORE CONNECT ADIM ADIM
 --------------------------------------------------------------
 
-[  ] Her locale için ayrı App Store listing oluştur
-     (en-US, en-GB, de-DE, fr-FR, ja-JP, ko-KR, tr-TR, es-ES, pt-BR)
-[  ] Her locale için lokalize ekran görüntüleri yükle
-[  ] App Privacy Labels → "Data Not Collected"
-[  ] Review Notes'a REVIEW_NOTES.md içeriğini kopyala
-[  ] Privacy Policy URL ekle
-[  ] Support URL ekle (mathpulse.app@gmail.com)
-[  ] Kategori: Education (Primary), Games > Puzzle (Secondary)
-[  ] Yaş derecelendirmesi: 4+
-[  ] TestFlight ile en az 2-3 cihazda test et
-[  ] Background/foreground geçişlerini test et
-[  ] Ses ve silent mode testleri
+1. developer.apple.com → License Agreement kabul et
+2. appstoreconnect.apple.com → Apps → "+" → New App
+3. Bundle ID seç, isim gir, SKU gir
+4. App Information:
+   - Name + Subtitle
+   - Category (Primary + Secondary)
+   - Age Rating (soruları cevapla → 4+ çıkmalı)
+   - Content Rights (No third-party)
+5. Pricing and Availability:
+   - Price: Free ($0.00)
+   - 175 ülke seçili
+   - Apple Silicon Mac → kapat
+   - Apple Vision Pro → kapat
+   - Distribution: Public
+6. App Privacy:
+   - Privacy Policy URL ekle
+   - "Data Not Collected" seç (veri toplamıyorsan)
+   - Publish bas
+7. Business:
+   - DSA Trader Status doldur (gelir planlıyorsan "Trader")
+   - Adres doğrulama belgesi yükle (e-Devlet yerleşim yeri)
+8. 1.0 Prepare for Submission:
+   - Screenshot'ları yükle (1284x2778)
+   - Description, Keywords, Support URL gir
+   - Build seç
+   - Contact Information doldur (telefon +90 formatında)
+   - Review Notes yapıştır
+   - Sign-in required → kapalı
+   - Version Release → Automatically release
+9. Save → Add for Review → Submit for Review
+
+
+[A10] EAS BUILD ve SUBMIT KOMUTLARI
+--------------------------------------------------------------
+
+# Kurulum
+npm install -g eas-cli
+eas login
+
+# Proje bağlama
+eas init
+
+# iOS production build (bulutta, 15-30 dk)
+eas build --platform ios --profile production
+
+# Build'i App Store Connect'e gönderme
+eas submit --platform ios
+
+# TestFlight (test için)
+App Store Connect → TestFlight → External Testing →
+Grup oluştur → Tester ekle veya Public Link paylaş
+
+
+██████████████████████████████████████████████████████████████
+  BÖLÜM B: ASO STRATEJİSİ (App Store Optimization)
+██████████████████████████████████████████████████████████████
+
+
+[B1] RAKİP ANALİZİ NASIL YAPILIR
+--------------------------------------------------------------
+
+B1.1 Rakip Metadata Haritası
+     Her rakibin Title + Subtitle'ını analiz et.
+     Hangi keyword'lerin eksik olduğunu bul.
+     Bu eksikler = senin fırsatın.
+
+B1.2 Keyword Gap Matrisi
+     Her arama sorgusunda:
+     - En güçlü rakip kim?
+     - Rakibin zayıflığı ne?
+     - Senin hedef sıralamanız ne?
+     Yeşil = düşük rekabet, hemen gir
+     Turuncu = orta rekabet, 3 ay
+     Kırmızı = yüksek rekabet, 6+ ay
+
+B1.3 Rakip Zayıflıkları
+     - Son güncelleme tarihi eski mi? (algoritma güncel olanı tercih eder)
+     - Keyword'lerde kör nokta var mı?
+     - UX şikayetleri var mı? (yorumlardan bak)
+     - Fiyatlı mı? (ücretsiz alternatif avantaj)
+     - Kaç dilde? (daha fazla dil = daha geniş pazar)
+
+B1.4 MathPulse Rakip Tablosu (Referans)
+     Math Brain Booster: 4.0★, 17K rating, EN only, eski UX
+     Elevate: 4.7★, 700K+ rating, subscription, math yok title'da
+     Lumosity: 4.6★, 200K+ rating, pahalı, math yok title'da
+     King of Math: 4.5★, ücretli, "game" yok title'da
+     Mental Math Games: 4.3★, subtitle'da keyword israfı
+
+
+[B2] TITLE / SUBTITLE MİMARİSİ
+--------------------------------------------------------------
+
+Apple karakter limitleri:
+     Title: 30 karakter (en yüksek ağırlık)
+     Subtitle: 30 karakter (ikinci en önemli)
+     Keywords: 100 karakter (gizli, virgülle ayrılmış)
+     Toplam: 160 indekslenen karakter
+
+3 ALTIN KURAL:
+     1. Title'daki kelimeyi Subtitle veya Keywords'te TEKRARLAMA
+        (Apple ek puan vermiyor, sadece karakter israfı)
+     2. Keywords'te boşluk kullanma, sadece virgül
+     3. Subtitle'ın son karakteri 30. karakter olursa bug
+        nedeniyle indexlenmeyebilir — max 29'da dur
+
+Locale bazlı farklı title/subtitle kullan:
+     en-US vs en-GB: "math" vs "maths" — ayrı locale şart!
+     Her ülkenin arama alışkanlığı farklı.
+     İngilizce keyword'leri çevirme — yerel araştırma yap.
+
+MathPulse Title/Subtitle Referansı:
+     en-US: "MathPulse: Quick Math Game" / "Brain Training & Reflex Test"
+     en-GB: "MathPulse: Quick Maths Game" / "Brain Training & Reflex Test"
+     de-DE: "MathPulse: Kopfrechnen Spiel" / "Gehirntraining & Reflex Test"
+     fr-FR: "MathPulse: Calcul Mental Jeu" / "Entrainement Cerveau Rapide"
+     ja-JP: "MathPulse: 計算ゲーム" / "脳トレ & 反射神経テスト"
+     ko-KR: "MathPulse: 수학 계산 게임" / "두뇌 훈련 & 반응속도 테스트"
+     tr-TR: "MathPulse: Hızlı Matematik" / "Beyin Egzersizi & Refleks"
+     es-ES: "MathPulse: Juego Matematico" / "Entrenamiento Cerebral Rapido"
+     pt-BR: "MathPulse: Jogo Matematica" / "Treinamento Cerebral Rapido"
+
+
+[B3] KEYWORD FIELD STRATEJİSİ
+--------------------------------------------------------------
+
+100 karakter, virgülle ayrılmış, boşluk yok.
+Title ve Subtitle'daki kelimeleri TEKRARLAMA.
+
+Her locale için AYRI keyword seti:
+     en-US: mental,arithmetic,speed,number,logic,fast,challenge,
+            prime,focus,cognitive,IQ,quiz
+     en-GB: mental,arithmetic,speed,number,logic,fast,challenge,
+            prime,focus,cognitive,revision,quiz
+     de-DE: Mathe,Rechnen,Logik,Schnell,Zahlen,Training,Aufgabe,
+            IQ,Fokus,Multiplikation,Quiz,mental
+     fr-FR: maths,logique,vitesse,nombre,arithmetique,defi,
+            reflexe,intelligent,quiz,mental,cerveau,vite
+     ja-JP: 数学,算数,脳,クイズ,速い,訓練,暗算,論理,集中,
+            知能,挑戦,掛け算,足し算,割り算,引き算
+     ko-KR: 암산,수학,퀴즈,빠른,논리,집중,훈련,지능,도전,
+            곱셈,나눗셈,덧셈,뺄셈,속도
+     tr-TR: zeka,hesap,mantik,odak,antrenman,hizli,sayi,oyun,
+            toplama,carpma,bolme,cikarma,egitim
+     es-ES: matematica,cerebro,quiz,calculo,logica,rapido,
+            numero,mental,reto,aritmetica,inteligencia,velocidad
+     pt-BR: matematica,cerebro,quiz,calculo,logica,rapido,
+            numero,mental,desafio,aritmetica,inteligencia,velocidade
+
+
+[B4] SCREENSHOT OCR İNDEXLEME (Haziran 2025 Güncellemesi)
+--------------------------------------------------------------
+
+Apple artık screenshot'lardaki metinleri OCR ile okuyup
+keyword olarak indeksliyor. Bu devasa bir fırsat.
+
+Kurallar:
+     - Metin screenshot'ın ÜST kısmında olmalı (OCR üstten okur)
+     - Font büyük olmalı (min 40pt eşdeğeri)
+     - Arka planla iyi kontrast
+     - Her locale için ayrı lokalize metin
+     - Keyword-rich caption'lar kullan
+
+Örnek caption'lar (en-US):
+     1. "Think Fast. Solve Faster." Quick Math Reflex Game
+     2. "Rules Change. You Adapt." Brain Training Challenge
+     3. "Every Second Counts." Speed Math Timer
+     4. "From Simple to Expert." Progressive Math Difficulty
+     5. "Daily Challenge." Track Your Math Progress
+     6. "Beat Your Friends." Share Your Math Score
+
+
+[B5] ORGANİK İNDİRME BÜYÜME TAKTİKLERİ
+--------------------------------------------------------------
+
+B5.1 Rating & Review Sistemi (En Kritik Faktör)
+     Apple 4.0 altına keyword cezası verir.
+     4.5+ uygulamalar %25-40 daha fazla conversion eder.
+
+     SKStoreReviewController ile akıllı prompt sistemi:
+     - Yılda max 3 prompt hakkı (Apple limiti)
+     - Prompt 1: 5+ oturum, personal best, 7+ gün
+     - Prompt 2: 20+ oturum, yeni içerik deneyimlenmiş
+     - Prompt 3: 50+ oturum, 30+ gün kullanıcı
+
+     ASLA YAPMA:
+     - İlk 3 oyunda prompt gösterme
+     - Kayıp ekranında prompt gösterme
+     - "5 yıldız ver" gibi yönlendirme yapma
+
+B5.2 Olumsuz Yorumlara Yanıt
+     24 saat içinde, yorumun dilinde yanıt ver.
+     Bug varsa "vX.X'te düzelttik" yaz.
+     İstek varsa "roadmap'te, yakında" yaz.
+     Her ülkenin dilinde yanıt şablonları hazırla.
+
+B5.3 Sezonsal Keyword Takvimi
+     Ağu-Eyl: back to school, math practice, exam prep
+     Eki-Kas: exam, test prep, math revision (UK GCSE)
+     Ara-Oca: new year challenge, brain boost
+     Mar-May: spring exam, university entrance
+     Haz-Ağu: summer brain games, keep sharp
+     Şub-Haz (TR): LGS hazırlık, matematik pratik
+     Oca-Mar (JP): 受験対策, 算数練習
+
+     Sezonsal keyword'ler Promotional Text'e ekle
+     (App Store Connect'te update gerektirmez, anlık değişir)
+
+B5.4 Viral Loop — "Beat My Score" Paylaşım
+     Game Over'da share butonu
+     Lokalize paylaşım mesajı (8 dilde)
+     9:16 format (Instagram Story / WhatsApp uyumlu)
+     App Store download linki içermeli
+
+B5.5 Daily Challenge (Retention)
+     2026'da Apple algoritması retention'a öncelik veriyor.
+     Günlük geri gelme nedeni = daha yüksek D7/D30 retention
+     Gün serisi (day streak) = loss aversion efekti
+     Menü ekranında görünür Daily Challenge kartı
+
+B5.6 TikTok / Sosyal Medya
+     "Bu matematik oyununu yenebilir misin?" challenge videoları
+     #mathchallenge hashtag'i
+     Micro-influencer işbirlikleri (10K-100K takipçi)
+     Ülke bazlı hedefleme
+
+
+[B6] LANSMAN WAVE STRATEJİSİ
+--------------------------------------------------------------
+
+Tüm pazarlarda aynı anda çıkmak ASO performansını düşürür.
+Fazlı lansman = yoğunlaştırılmış review + download sinyali.
+
+Wave 1 (Gün 0): ABD, UK, Almanya, Fransa, Japonya, G.Kore, Türkiye
+     Yüksek iOS, yüksek ARPU, premium pazarlar
+
+Wave 2 (30-60 gün): İspanya/LatAm, Brezilya, Hindistan, S.Arabistan
+     Yüksek indirme hacmi, geniş kitle
+
+Wave 3 (90+ gün): Endonezya, Vietnam, Filipinler, Polonya
+     Büyüyen pazarlar, daha fazla lokalizasyon gerektirir
+
+
+[B7] HAFTALIK ASO OPERASYON TAKVİMİ
+--------------------------------------------------------------
+
+Her gün (10 dk):
+     Tüm yeni yorumlara yanıt ver (her dilde)
+
+Haftalık (20 dk):
+     Keyword sıralamasını kontrol et
+     App Store Connect Analytics: Impressions, CTR, Install rate
+     Rakip güncelleme takibi
+
+İlk 30 gün:
+     Tap-through rate <3.5% ise icon A/B testi başlat
+     Keyword ranking velocity analizi
+
+Aylık:
+     Keyword field rotasyonu (düşük performanslıları değiştir)
+
+50 rating sonra:
+     Rating ortalaması 4.0+ mı kontrol et
+
+100 rating sonra:
+     Tam ASO audit: Title/subtitle değişiklik gerekiyor mu?
+
+Her sezon önce:
+     Sezonsal metadata güncelleme (2 hafta önceden planla)
+
+
+[B8] SIRALAMA HIZI BEKLENTİSİ
+--------------------------------------------------------------
+
+Gün 1-7: Metadata gönderildi, sadece bekle
+Gün 7-14: İlk indexleme, long-tail keyword'lerde görünme
+Hafta 2-4: Düşük rekabetli keyword'lerde top 10 girişi
+Ay 1-2: 10-20 rating ile orta rekabetli keyword'lerde hareket
+Ay 2-3: 50+ rating ile orta keyword'lerde top 10
+Ay 3-6: 100+ rating ile ana keyword'lerde top 20-30
+Ay 6+: 500+ rating ile "math game" top 10 hedef
+
+
+██████████████████████████████████████████████████████████████
+  BÖLÜM C: RAKİPLERİN ÖNÜNE GEÇMEK İÇİN YAPILANLAR
+██████████████████████████████████████████████████████████████
+
+
+[C1] KEYWORD GAP FIRSATLARI (Rakiplerin Boş Bıraktığı Alanlar)
+--------------------------------------------------------------
+
+"math reflex game" → Tüm rakiplerde eksik → Hemen #1-3
+"quick math game" → Math Brain Booster'da "quick" yok → #1-5
+"math speed test" → Kombine eksik → #1-5
+"number reflex" → Güçlü rakip yok → #1-3
+"prime number game" → Hiçbir rakip optimize değil → #1
+"fast math game" → Rakiplerde "fast" yok → #2-6
+
+
+[C2] RAKİPLERE KARŞI AVANTAJLARIMIZ
+--------------------------------------------------------------
+
+Dimension            Rakipler                MathPulse
+Mekanik              Yavaş, menü odaklı      Tek-tuş refleks + timer
+Kural Çeşitliliği    Sabit soru tipleri      Dönen kurallar (even/odd/prime)
+Dil                  Çoğu sadece EN          8 dil lansanda
+Fiyat                $1-$15/ay              Ücretsiz, reklamsız
+Haptik               Çoğunda yok            60fps + haptic feedback
+Viral                Share mekanizması yok   "Beat My Score" share kartı
+Günlük Motivasyon    Çoğunda yok            Daily Challenge + gün serisi
+Onboarding           Çoğunda yok            Dil seçimli onboarding
+
+
+[C3] TEKNİK AVANTAJLAR
+--------------------------------------------------------------
+
+- React Native + Expo (hızlı geliştirme + cross-platform)
+- Reanimated ile 60/120 FPS animasyonlar
+- expo-av ile ses sistemi
+- expo-haptics ile dokunsal geri bildirim
+- AsyncStorage ile tamamen offline
+- TypeScript strict mode
+- ErrorBoundary ile crash önleme
+- AppState listener ile arka plan güvenliği
+
+
+[C4] 8 DİL DESTEĞİ (i18n)
+--------------------------------------------------------------
+
+Teknik altyapı:
+- i18n/translations.ts: Tüm çeviriler tek dosyada
+- i18n/LanguageContext.tsx: React Context + useT() hook
+- i18n/ruleLabels.ts: Dinamik kural/zorluk çevirileri
+- AsyncStorage ile kalıcı dil tercihi
+- Onboarding'de bayraklı dil seçim ekranı
+- Ayarlar'dan değiştirilebilir
+
+76+ string, 8 dilde:
+EN, TR, DE, PT, ES, FR, JA, KO
+
+Her dilde çevrilen:
+- Menü, oyun, game over ekranları
+- Oyun kuralları ve zorluk seviyeleri
+- İstatistikler ve ayarlar
+- Nasıl oynanır modalı
+- Paylaşım mesajları
+- Hata ekranları
+
+
+██████████████████████████████████████████████████████████████
+  BÖLÜM D: APP STORE CONNECT CHECKLIST
+██████████████████████████████████████████████████████████████
+
+
+[D1] SUBMIT ÖNCESİ KONTROL LİSTESİ
+--------------------------------------------------------------
+
+Teknik:
+[X] Bundle Identifier gerçek ve benzersiz
+[X] version: 1.0.0, buildNumber: 1
+[X] supportsTablet: false
+[X] ITSAppUsesNonExemptEncryption: false
+[X] Gereksiz bağımlılıklar kaldırıldı
+[X] Production build'de debug kodu yok
+[X] ErrorBoundary mevcut
+[X] AppState listener mevcut
+[X] Ses toggle çalışıyor (kapatınca duruyor)
+
+App Store Connect:
+[X] License Agreement kabul edildi
+[X] App oluşturuldu (New App)
+[X] Name + Subtitle girildi
+[X] Category: Education + Games/Puzzle/Trivia
+[X] Age Rating: 4+
+[X] Content Rights: No third-party
+[X] Pricing: Free ($0.00)
+[X] 175 ülke "Available on App Release"
+[X] App Privacy: "Data Not Collected" + Privacy Policy URL
+[X] DSA Trader Status dolduruldu
+[X] Screenshots yüklendi (1284x2778)
+[X] Description + Keywords girildi
+[X] Support URL girildi
+[X] Build seçildi (1.0.0 build 1)
+[X] Contact Information dolduruldu
+[X] Review Notes yapıştırıldı
+[X] Sign-in required: kapalı
+[X] Version Release: Automatically release
+[X] Submit for Review basıldı
+
+TestFlight:
+[X] Beta Testers grubu oluşturuldu
+[X] Build eklendi
+[X] Public link oluşturuldu
+[X] 3 tester eklendi
+
+
+██████████████████████████████████████████████████████████████
+  BÖLÜM E: DİĞER PROJELER İÇİN GENEL KURALLAR
+██████████████████████████████████████████████████████████████
+
+
+[E1] APPLE'IN EN SIK RED VERDİĞİ 8 MADDE
+--------------------------------------------------------------
+
+1. Minimum Functionality (4.2)
+   Çözüm: 5+ ekran, derinlik, ilerleme, ayarlar
+
+2. Crash/Bug (2.1)
+   Çözüm: ErrorBoundary, try/catch, AppState, test
+
+3. Gizlilik (5.1)
+   Çözüm: Privacy Policy + uygulama içi link + doğru beyan
+
+4. Metadata Uyumsuzluğu (2.3)
+   Çözüm: Gerçek screenshot, doğru açıklama, çalışan linkler
+
+5. IAP Hataları (3.1.1)
+   Çözüm: Apple IAP kullan, Restore Purchases butonu ekle
+
+6. Tasarım/HIG
+   Çözüm: Safe area, okunabilir font, 44pt butonlar, animasyonlar
+
+7. Kopya/Taklit (4.1)
+   Çözüm: Özgün isim, özgün mekanik, isim çakışması kontrolü
+
+8. iPad Uyumsuzluğu
+   Çözüm: supportsTablet: false veya düzgün iPad UI
+
+
+[E2] ASO'NUN 5 ALTIN KURALI
+--------------------------------------------------------------
+
+1. Title'da en önemli keyword'ler olmalı (en yüksek ağırlık)
+2. Title + Subtitle + Keywords arasında tekrar yapma
+3. Her locale için AYRI keyword araştırması yap
+4. Her 4-6 haftada düşük performanslı keyword'leri değiştir
+5. Rating 4.0+ olmadan ASO çalışması etkisiz kalır
+
+
+[E3] RETENTION > INSTALL
+--------------------------------------------------------------
+
+2026'da Apple algoritması:
+- İndirme sayısından çok retention'a bakıyor
+- D7 ve D30 retention güçlü sıralama sinyali
+- Uninstall oranı yüksekse sıralama düşer
+- Daily Challenge, streak sistemi, bildirimler retention artırır
+
+
+[E4] EAS BUILD KOMUT REFERANSı
+--------------------------------------------------------------
+
+npm install -g eas-cli      # EAS CLI kur
+eas login                    # Expo hesabına giriş
+eas init                     # Projeyi EAS'a bağla
+eas build --platform ios --profile production    # iOS build
+eas build --platform android --profile production # Android build
+eas submit --platform ios    # App Store'a gönder
+eas submit --platform android # Google Play'e gönder
 
 
 ==============================================================
-  ÖZET: Apple'ın en sık red verdiği maddeler için durum
+  KAYNAKLAR
 ==============================================================
 
-  1. Minimum Functionality (4.2)  → TAMAM. 6 ekran, zorluk sistemi,
-                                    streak, istatistik, ses, haptic,
-                                    8 dil, onboarding
-  2. Crash/Bug (2.1)              → TAMAM. ErrorBoundary, AppState,
-                                    try/catch, cleanup
-  3. Gizlilik (5.1)               → TAMAM. Privacy Policy var,
-                                    uygulama içi link var, mail var
-  4. Metadata (2.3)               → TAMAM. İsim tutarlı (MathPulse),
-                                    versiyon doğru, Review Notes hazır
-  5. IAP (3.1.1)                  → TAMAM. IAP yok, reklam yok
-  6. Tasarım/HIG                  → TAMAM. Safe area, animasyonlar,
-                                    font, accessibility, 8 dil tutarlı
-  7. Kopya/Taklit (4.1)           → TAMAM. Yeni özgün isim (MathPulse),
-                                    özgün kural bazlı refleks mekanigi
-  8. iPad uyumu                   → TAMAM. supportsTablet: false
+Apple Resmi:
+- App Review Guidelines: developer.apple.com/app-store/review/guidelines/
+- Human Interface Guidelines: developer.apple.com/design/human-interface-guidelines/
+- App Store Product Page: developer.apple.com/app-store/product-page/
+- App Store Connect Help: developer.apple.com/help/app-store-connect/
+
+ASO Araçları:
+- AppTweak: apptweak.com (keyword araştırma, rakip analizi)
+- ASOMobile: asomobile.net (bütçe dostu, Asya pazarları)
+- Sensor Tower: sensortower.com (pazar istihbaratı)
+- MobileAction: mobileaction.co (lokalizasyon keyword)
+- App Store Connect Analytics: Ücretsiz, Apple'ın kendi aracı
+
+Expo/React Native:
+- Expo Docs: docs.expo.dev
+- EAS Build: docs.expo.dev/build/introduction/
+- expo-store-review: docs.expo.dev/versions/latest/sdk/storereview/
+
+Pazar Verileri:
+- Brain Training Apps Market: snsinsider.com
+- Mobile Gaming Statistics: blog.udonis.co/mobile-gaming-statistics
+- Puzzle Games Market: businessofapps.com/data/puzzle-games-market/
+
 
 ==============================================================
-  Not: Bu döküman 14 Mart 2026 tarihinde güncellenmiştir.
-  Önceki isim: IMPULSE → Yeni isim: MathPulse
+  Not: Bu döküman 15 Mart 2026 tarihinde güncellenmiştir.
+  MathPulse projesinin tüm sürecini ve diğer projeler
+  için uygulanabilir genel kuralları içerir.
 ==============================================================
