@@ -7,6 +7,8 @@ import { RuleBadge } from "@/components/RuleBadge";
 import { ScorePill } from "@/components/ScorePill";
 import { StreakBadge } from "@/components/StreakBadge";
 import { Equation } from "@/hooks/useMathGame";
+import { useT } from "@/i18n/LanguageContext";
+import { getRuleLabel } from "@/i18n/ruleLabels";
 
 interface PlayingScreenProps {
     topPad: number;
@@ -14,7 +16,7 @@ interface PlayingScreenProps {
     score: number;
     bestScore: number;
     currentStreak: number;
-    ruleLabel: string;
+    ruleId: string;
     ruleFlash: boolean;
     equation: Equation;
     ruleMatches: boolean;
@@ -29,7 +31,7 @@ export function PlayingScreen({
     score,
     bestScore,
     currentStreak,
-    ruleLabel,
+    ruleId,
     ruleFlash,
     equation,
     ruleMatches,
@@ -37,16 +39,17 @@ export function PlayingScreen({
     timerDuration,
     onTap,
 }: PlayingScreenProps) {
+    const t = useT();
+    const ruleLabel = getRuleLabel(ruleId, t);
+
     return (
         <Pressable style={[styles.container, styles.playArea]} onPress={onTap}>
-            {/* Header */}
             <View style={[styles.gameHeader, { marginTop: topPad }]}>
-                <ScorePill label="SKOR" value={score} accent />
+                <ScorePill label={t.score} value={score} accent />
                 {currentStreak > 1 && <StreakBadge streak={currentStreak} />}
-                <ScorePill label="EN İYİ" value={bestScore} />
+                <ScorePill label={t.best} value={bestScore} />
             </View>
 
-            {/* Main Content */}
             <View style={styles.gameCenter}>
                 <RuleBadge label={ruleLabel} flash={ruleFlash} />
 
@@ -54,22 +57,9 @@ export function PlayingScreen({
                     <Text style={styles.equationText}>{equation.display}</Text>
                 </View>
 
-                <View style={styles.hintRow}>
-                    {ruleMatches ? (
-                        <View style={styles.goHint}>
-                            <Ionicons name="hand-left-outline" size={14} color={COLORS.mint} />
-                            <Text style={styles.goHintText}>DOKUN!</Text>
-                        </View>
-                    ) : (
-                        <View style={styles.noGoHint}>
-                            <Ionicons name="time-outline" size={14} color={COLORS.gray} />
-                            <Text style={styles.noGoHintText}>BEKLEME ZAMANI</Text>
-                        </View>
-                    )}
-                </View>
+                <View style={styles.hintRow} />
             </View>
 
-            {/* Timer Bar */}
             <View style={[styles.timerContainer, { paddingBottom: bottomPad + 16 }]}>
                 <TimerBar
                     equationKey={equation.equationKey}

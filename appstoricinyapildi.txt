@@ -1,0 +1,306 @@
+==============================================================
+  MathPulse (eski adı: IMPULSE)
+  App Store Red Yememek İçin Yapılan Tüm Düzeltmeler
+  Tarih: 14 Mart 2026
+==============================================================
+
+
+[1] KRİTİK DÜZELTMELER (Yapılmasaydı Kesin Red Gelirdi)
+--------------------------------------------------------------
+
+1.1 Bundle Identifier Düzeltildi
+    Eski: "com.myapp" (placeholder)
+    Yeni: "com.corut.mathpulse"
+    Dosya: app.json
+
+1.2 Gizlilik Politikası Oluşturuldu
+    - PRIVACY_POLICY.md dosyası eklendi
+    - İletişim e-postası: mathpulse.app@gmail.com
+    - Veri toplamadığımız açıkça belirtildi
+    - COPPA uyumlu (çocuk verisi toplanmıyor)
+    - KVKK/GDPR uyumlu
+
+1.3 Gizlilik Politikası Uygulama İçinden Erişilebilir
+    - Ayarlar ekranına "Gizlilik Politikası" / "Privacy Policy" linki eklendi
+    - Tıklayınca tarayıcıda açılıyor
+    - Apple bu linkin uygulama içinde olmasını zorunlu tutuyor
+
+1.4 Destek & İletişim Linki Eklendi
+    - Ayarlar ekranına "Destek & İletişim" / "Support & Contact" eklendi
+    - Mail adresiyle doğrudan iletişim
+    - Apple, çalışan bir support URL istiyor
+
+1.5 Replit Origin Kaldırıldı
+    Eski: app.json'da "origin": "https://replit.com/"
+    Yeni: Kaldırıldı
+
+1.6 Slug ve Scheme Düzeltildi
+    Eski: "slug": "my-app", "scheme": "myapp"
+    Yeni: "slug": "mathpulse", "scheme": "mathpulse"
+
+1.7 iOS Build Number Eklendi
+    "buildNumber": "1" eklendi
+
+1.8 Şifreleme Beyanı Eklendi
+    "ITSAppUsesNonExemptEncryption": false
+
+
+[2] İSİM DEĞİŞİKLİĞİ: IMPULSE → MATHPULSE
+--------------------------------------------------------------
+
+Neden değiştirildi:
+    App Store'da "Impulse - Brain Training" adında 4.7 yıldızlı,
+    5M+ indirmeli bir uygulama zaten var. Aynı isimle çıkmak:
+    - Arama sonuçlarında kaybolmaya
+    - Apple'dan "copycat" red'i almaya
+    - Organik trafiğin rakibe gitmesine neden olurdu
+
+Değiştirilen dosyalar ve alanlar:
+    - app.json: name, slug, scheme, bundleIdentifier, package
+    - package.json: name
+    - package-lock.json: name (otomatik)
+    - settings.tsx: footer, mail adresi, GitHub URL
+    - PRIVACY_POLICY.md: tüm Impulse referansları
+    - REVIEW_NOTES.md: tüm IMPULSE referansları
+    - ASO_STRATEJISI.md: tüm referanslar
+    - i18n/translations.ts: 8 dilde menuBadge
+
+
+[3] CRASH / BUG ÖNLEMELERİ (Guideline 2.1)
+--------------------------------------------------------------
+
+3.1 API Client Crash Riski Giderildi
+    Eski: query-client.ts'de EXPO_PUBLIC_DOMAIN yoksa crash yapıyordu
+    Yeni: Tüm API/fetch kodu kaldırıldı, sadece temiz QueryClient kaldı
+
+3.2 ErrorBoundary Mevcut
+    Tüm uygulama ErrorBoundary ile sarılı.
+    Beklenmedik hatalarda "Tekrar Dene" butonu ile yeniden yükleme.
+
+3.3 AppState Listener (Arka Plan Yönetimi)
+    Oyun sırasında uygulama arka plana atılırsa:
+    - Oyun otomatik bitiyor (hile önleme)
+    - Timer'lar temizleniyor
+    - Ses duruyor
+
+3.4 Ses Sistemi Hata Yönetimi
+    - try/catch ile sarılı
+    - staysActiveInBackground: false
+    - Ses cleanup düzgün (memory leak yok)
+
+3.5 console.log/warn/error Temizlendi
+    - Production build'de gereksiz log yok
+
+
+[4] MİNİMUM FONKSİYONALİTE (Guideline 4.2)
+--------------------------------------------------------------
+
+4.1 Çoklu Ekran Yapısı (6 Ekran)
+    - Dil seçim ekranı (onboarding, bayraklı, 8 dil)
+    - Menü ekranı (profesyonel best score kartı)
+    - Oyun ekranı (kural, denklem, timer, streak)
+    - Game Over ekranı (2x2 istatistik grid)
+    - İstatistikler ekranı (son 20 oyun, ortalama skor, isabet oranı)
+    - Ayarlar ekranı (ses, titreşim, dil, gizlilik, destek, veri sıfırlama)
+
+4.2 Dinamik Zorluk Sistemi (4 Kademe)
+    - Başlangıç (0-10): Çift/tek, toplama-çıkarma
+    - Orta (11-30): Asal sayılar, büyüklük karşılaştırmaları
+    - Zor (31-60): Çarpma, 5/0 ile biten, 3'e bölünen
+    - Uzman (60+): Bölme, parantezli işlemler
+    - Süre 2500ms → 700ms'ye kadar düşüyor
+
+4.3 Streak / Combo Sistemi
+    - 2+ streak'te görsel badge
+    - 5+ turuncu, 10+ kırmızı ateş animasyonu
+    - 5, 10, 15... streak'te özel ses efekti
+
+4.4 İstatistik ve İlerleme Takibi
+    - Son 20 oyun kaydı
+    - Ortalama skor, en iyi skor, en uzun seri
+    - İsabet oranı progress bar
+
+4.5 Ses Sistemi (4 ses efekti)
+    - Oyun başlangıç, doğru cevap, streak, game over
+
+4.6 Haptic Feedback
+    - Doğru/yanlış cevapta farklı titreşim
+
+4.7 Nasıl Oynanır (Onboarding)
+    - HowToPlayModal, 4 kural açıklaması + örnek
+
+4.8 Animasyonlu Geçişler
+    - fade, scale, shake — 60/120 FPS Reanimated
+
+
+[5] 8 DİL DESTEĞİ (i18n) — GLOBAL PAZAR
+--------------------------------------------------------------
+
+Neden eklendi:
+    - Rakip analizi gösterdi ki matematik/beyin eğitimi pazarı
+      global, çok dilli uygulamalar %20-35 daha iyi retention alıyor
+    - "Impulse (Brain Training)" rakibi 5 dilde, biz 8 dilde çıkıyoruz
+
+5.1 Desteklenen Diller (Bayraklı Seçim)
+    🇺🇸 English (varsayılan)
+    🇹🇷 Türkçe
+    🇩🇪 Deutsch (Almanya — Avrupa lideri, %5.07 pazar payı)
+    🇧🇷 Português (Brezilya — indirme hacminde dünya 2.'si)
+    🇪🇸 Español (İspanya + Latin Amerika — 500M+ konuşan)
+    🇫🇷 Français (Fransa + Kanada)
+    🇯🇵 日本語 (Japonya — %75 iOS, en yüksek ARPU)
+    🇰🇷 한국어 (Güney Kore — %75 öğrenci özel ders alıyor)
+
+5.2 Teknik Altyapı
+    - i18n/translations.ts: 76+ string, 8 dilde tam çeviri
+    - i18n/LanguageContext.tsx: React Context + useT() hook
+    - i18n/ruleLabels.ts: Kural ve zorluk çevirileri (dinamik)
+    - AsyncStorage ile kalıcı dil tercihi
+
+5.3 Onboarding Dil Seçim Ekranı
+    - İlk açılışta bayraklı dil seçim ekranı
+    - Kullanıcı dilini seçer, uygulama anında güncellenir
+    - Ayarlar'dan sonradan değiştirilebilir
+
+5.4 Çevrilen Alanlar (her dilde)
+    - Menü ekranı (title, tagline, butonlar)
+    - Oyun ekranı (SKOR, EN İYİ, DOKUN!, BEKLE, kural badge)
+    - Oyun kuralları (ÇİFT SAYI, TEK SAYI, ASAL SAYI, vb.)
+    - Zorluk seviyeleri (BAŞLANGIÇ, ORTA, ZOR, UZMAN)
+    - Game Over ekranı (istatistikler, butonlar)
+    - İstatistikler ekranı (tüm label'lar)
+    - Ayarlar ekranı (tüm ayar isimleri ve açıklamaları)
+    - Nasıl Oynanır modal (4 kural + örnek)
+    - Hata ekranları (ErrorFallback, 404)
+
+
+[6] ASO STRATEJİSİ (App Store Optimization)
+--------------------------------------------------------------
+
+6.1 Global Rakip Analizi Yapıldı
+    Rakipler: Impulse Brain Training (4.7★, 5M+),
+    Lumosity (4.4★, 100M+), Math Brain Booster (4.0★, 1M+),
+    Elevate (4.7★, 50M+), King of Math (4.5★, 5M+)
+
+6.2 MathPulse Farklılaşma Noktaları
+    - Kural bazlı refleks mekanigi (rakiplerde yok)
+    - 30 saniyelik micro-sessions
+    - 8 dil desteği lansanda (rakiplerin çoğu sadece EN)
+    - Ücretsiz, reklamsız, hesapsız
+    - Streak/combo sistemi
+
+6.3 Title/Subtitle Mimarisi (Her locale için)
+    en-US: "MathPulse: Quick Math Game" / "Brain Training & Reflex Test"
+    en-GB: "MathPulse: Quick Maths Game" / "Brain Training & Reflex Test"
+    de-DE: "MathPulse: Kopfrechnen Spiel" / "Gehirntraining & Reflex Test"
+    tr-TR: "MathPulse: Hizli Matematik" / "Beyin Egzersizi & Refleks"
+    ja-JP: "MathPulse - 計算ゲーム 脳トレ" / "脳トレ & 反射神経テスト"
+    ko-KR: "MathPulse - 수학게임 두뇌훈련" / "뇌 훈련 & 반응속도 테스트"
+    es-ES: "MathPulse: Juego Matematico" / "Entrenamiento Cerebral Rapido"
+    pt-BR: "MathPulse: Jogo Matematica" / "Treinamento Cerebral Rapido"
+
+6.4 Keyword Stratejisi (100 karakter, her locale farklı)
+    - Title'daki kelimeler Keywords'te tekrarlanmıyor
+    - Her locale için yerel keyword araştırması yapıldı
+    - Long-tail keyword'ler (düşük rekabet, yüksek dönüşüm) hedeflendi
+
+6.5 Lansman Wave Stratejisi
+    Wave 1 (Gün 0): ABD, UK, Almanya, Fransa, Japonya, G.Kore, Türkiye
+    Wave 2 (30-60 gün): İspanya/LatAm, Brezilya, Hindistan, Suudi Arabistan
+    Wave 3 (90+ gün): Endonezya, Vietnam, Filipinler, Polonya
+
+6.6 Dokümanlar
+    - ASO_STRATEJISI.md: Detaylı ASO planı
+    - MathPulse_Global_ASO_Strategy.docx: Kapsamlı rakip analizi (assets/)
+
+
+[7] METADATA UYUMU (Guideline 2.3)
+--------------------------------------------------------------
+
+7.1 Uygulama İsmi Tutarlı
+    Her yerde "MathPulse" / "mathpulse"
+    app.json, package.json, settings footer, privacy policy
+
+7.2 Versiyon Bilgisi
+    - version: 1.0.0, buildNumber: 1
+    - Ayarlar: "MathPulse v1.0.0 (Build 1)"
+
+7.3 Review Notes Hazır
+    REVIEW_NOTES.md — App Store Connect'e kopyalanacak
+    Offline, login yok, IAP yok, reklam yok belirtildi
+
+7.4 Kategori Önerisi (Doküman bazlı)
+    Primary: Education (Games değil — daha az rekabet)
+    Secondary: Games > Puzzle
+
+
+[8] iPad UYUMSUZLUĞU YÖNETİLDİ
+--------------------------------------------------------------
+
+supportsTablet: false — iPhone-only
+
+
+[9] GEREKSİZ BAĞIMLILIKLAR TEMİZLENDİ
+--------------------------------------------------------------
+
+Kaldırılan: expo-location, expo-image-picker, expo-glass-effect
+Info.plist'te gereksiz izin yok
+
+
+[10] EAS BUILD YAPILANDIRMASI
+--------------------------------------------------------------
+
+eas.json: development, preview, production profilleri
+appVersionSource: "remote", iOS distribution: "store"
+
+
+[11] GÜVENLİK ve KOD KALİTESİ
+--------------------------------------------------------------
+
+- TypeScript Strict Mode aktif
+- AsyncStorage + Audio hataları catch ediliyor
+- ErrorBoundary tüm uygulamayı sarıyor
+- Production build'de debug/placeholder/mock yok
+
+
+[12] APP STORE CONNECT'TE YAPILACAKLAR (KOD DIŞI)
+--------------------------------------------------------------
+
+[  ] Her locale için ayrı App Store listing oluştur
+     (en-US, en-GB, de-DE, fr-FR, ja-JP, ko-KR, tr-TR, es-ES, pt-BR)
+[  ] Her locale için lokalize ekran görüntüleri yükle
+[  ] App Privacy Labels → "Data Not Collected"
+[  ] Review Notes'a REVIEW_NOTES.md içeriğini kopyala
+[  ] Privacy Policy URL ekle
+[  ] Support URL ekle (mathpulse.app@gmail.com)
+[  ] Kategori: Education (Primary), Games > Puzzle (Secondary)
+[  ] Yaş derecelendirmesi: 4+
+[  ] TestFlight ile en az 2-3 cihazda test et
+[  ] Background/foreground geçişlerini test et
+[  ] Ses ve silent mode testleri
+
+
+==============================================================
+  ÖZET: Apple'ın en sık red verdiği maddeler için durum
+==============================================================
+
+  1. Minimum Functionality (4.2)  → TAMAM. 6 ekran, zorluk sistemi,
+                                    streak, istatistik, ses, haptic,
+                                    8 dil, onboarding
+  2. Crash/Bug (2.1)              → TAMAM. ErrorBoundary, AppState,
+                                    try/catch, cleanup
+  3. Gizlilik (5.1)               → TAMAM. Privacy Policy var,
+                                    uygulama içi link var, mail var
+  4. Metadata (2.3)               → TAMAM. İsim tutarlı (MathPulse),
+                                    versiyon doğru, Review Notes hazır
+  5. IAP (3.1.1)                  → TAMAM. IAP yok, reklam yok
+  6. Tasarım/HIG                  → TAMAM. Safe area, animasyonlar,
+                                    font, accessibility, 8 dil tutarlı
+  7. Kopya/Taklit (4.1)           → TAMAM. Yeni özgün isim (MathPulse),
+                                    özgün kural bazlı refleks mekanigi
+  8. iPad uyumu                   → TAMAM. supportsTablet: false
+
+==============================================================
+  Not: Bu döküman 14 Mart 2026 tarihinde güncellenmiştir.
+  Önceki isim: IMPULSE → Yeni isim: MathPulse
+==============================================================

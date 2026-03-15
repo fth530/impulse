@@ -12,6 +12,8 @@ import { useRouter } from "expo-router";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
 import { useGameHistory } from "@/hooks/useGameHistory";
+import { useT } from "@/i18n/LanguageContext";
+import { getDifficultyLabelTranslated } from "@/i18n/ruleLabels";
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -26,23 +28,14 @@ function formatDuration(ms: number): string {
   const secs = Math.floor(ms / 1000);
   const m = Math.floor(secs / 60);
   const s = secs % 60;
-  return m > 0 ? `${m}dk ${s}s` : `${s}s`;
-}
-
-function difficultyLabel(level: number): string {
-  switch (level) {
-    case 1: return "Başlangıç";
-    case 2: return "Orta";
-    case 3: return "Zor";
-    case 4: return "Uzman";
-    default: return "—";
-  }
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
 }
 
 export default function StatsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { history, stats } = useGameHistory();
+  const t = useT();
 
   const topPad = Platform.OS === "web" ? 67 : insets.top;
   const bottomPad = Platform.OS === "web" ? 34 : insets.bottom;
@@ -63,7 +56,7 @@ export default function StatsScreen() {
         >
           <Feather name="arrow-left" size={22} color={COLORS.dark} />
         </Pressable>
-        <Text style={styles.headerTitle}>İSTATİSTİKLER</Text>
+        <Text style={styles.headerTitle}>{t.statsTitle}</Text>
         <View style={{ width: 36 }} />
       </View>
 
@@ -77,29 +70,29 @@ export default function StatsScreen() {
           <View style={styles.statCard}>
             <Ionicons name="game-controller-outline" size={20} color={COLORS.mint} />
             <Text style={styles.statValue}>{stats.totalGames}</Text>
-            <Text style={styles.statLabel}>Toplam Oyun</Text>
+            <Text style={styles.statLabel}>{t.totalGames}</Text>
           </View>
           <View style={styles.statCard}>
             <Ionicons name="analytics-outline" size={20} color={COLORS.mint} />
             <Text style={styles.statValue}>{stats.averageScore}</Text>
-            <Text style={styles.statLabel}>Ortalama Skor</Text>
+            <Text style={styles.statLabel}>{t.averageScore}</Text>
           </View>
           <View style={styles.statCard}>
             <Ionicons name="trophy-outline" size={20} color={COLORS.orange} />
             <Text style={styles.statValue}>{stats.bestScore}</Text>
-            <Text style={styles.statLabel}>En İyi Skor</Text>
+            <Text style={styles.statLabel}>{t.bestScore}</Text>
           </View>
           <View style={styles.statCard}>
             <Ionicons name="flame-outline" size={20} color="#FF3B30" />
             <Text style={styles.statValue}>{stats.longestStreak}</Text>
-            <Text style={styles.statLabel}>En Uzun Seri</Text>
+            <Text style={styles.statLabel}>{t.longestStreak}</Text>
           </View>
         </View>
 
         {/* Accuracy */}
         {stats.totalGames > 0 && (
           <View style={styles.accuracyCard}>
-            <Text style={styles.accuracyTitle}>İSABET ORANI</Text>
+            <Text style={styles.accuracyTitle}>{t.accuracyTitle}</Text>
             <View style={styles.accuracyRow}>
               <View style={styles.accuracyBarBg}>
                 <View
@@ -132,19 +125,19 @@ export default function StatsScreen() {
             </View>
             <View style={styles.accuracyDetails}>
               <Text style={styles.accuracyDetailText}>
-                {stats.totalCorrect} doğru / {stats.totalWrong} yanlış
+                {t.correctWrong(stats.totalCorrect, stats.totalWrong)}
               </Text>
             </View>
           </View>
         )}
 
         {/* History List */}
-        <Text style={styles.sectionTitle}>SKOR GEÇMİŞİ</Text>
+        <Text style={styles.sectionTitle}>{t.scoreHistory}</Text>
 
         {history.length === 0 ? (
           <View style={styles.emptyState}>
             <Ionicons name="hourglass-outline" size={32} color={COLORS.gray + "60"} />
-            <Text style={styles.emptyText}>Henüz oyun oynamadın</Text>
+            <Text style={styles.emptyText}>{t.noGamesYet}</Text>
           </View>
         ) : (
           history.map((record, i) => (
@@ -153,10 +146,10 @@ export default function StatsScreen() {
                 <Text style={styles.historyRankText}>#{i + 1}</Text>
               </View>
               <View style={styles.historyInfo}>
-                <Text style={styles.historyScore}>{record.score} puan</Text>
+                <Text style={styles.historyScore}>{record.score} {t.points}</Text>
                 <Text style={styles.historyMeta}>
                   {formatDate(record.date)} · {formatDuration(record.durationMs)} ·{" "}
-                  {difficultyLabel(record.maxDifficulty)}
+                  {getDifficultyLabelTranslated(record.maxDifficulty, t)}
                 </Text>
               </View>
               <View style={styles.historyStreak}>

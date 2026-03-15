@@ -4,6 +4,8 @@ import { Ionicons, Feather } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
 import { HowToPlayModal } from "@/components/HowToPlayModal";
 import { useRouter } from "expo-router";
+import { useT } from "@/i18n/LanguageContext";
+import { useDailyChallenge } from "@/hooks/useDailyChallenge";
 
 interface MenuScreenProps {
     topPad: number;
@@ -15,31 +17,26 @@ interface MenuScreenProps {
 export function MenuScreen({ topPad, bottomPad, bestScore, onPlay }: MenuScreenProps) {
     const router = useRouter();
     const [showHowTo, setShowHowTo] = useState(false);
+    const t = useT();
+    const daily = useDailyChallenge();
 
     return (
         <View style={[styles.container, { paddingTop: topPad + 20, paddingBottom: bottomPad + 20 }]}>
-            {/* Top Bar */}
             <View style={styles.menuTopBar}>
                 <View style={styles.menuBadge}>
                     <Ionicons name="flash" size={18} color={COLORS.mint} />
-                    <Text style={styles.menuBadgeText}>REFLEXS GAMİNG</Text>
+                    <Text style={styles.menuBadgeText}>{t.menuBadge}</Text>
                 </View>
                 <View style={styles.menuTopActions}>
                     <Pressable
-                        style={({ pressed }) => [
-                            styles.menuIconButton,
-                            pressed && { opacity: 0.6 },
-                        ]}
+                        style={({ pressed }) => [styles.menuIconButton, pressed && { opacity: 0.6 }]}
                         onPress={() => router.push("/stats" as any)}
                         hitSlop={8}
                     >
                         <Ionicons name="stats-chart" size={18} color={COLORS.gray} />
                     </Pressable>
                     <Pressable
-                        style={({ pressed }) => [
-                            styles.menuIconButton,
-                            pressed && { opacity: 0.6 },
-                        ]}
+                        style={({ pressed }) => [styles.menuIconButton, pressed && { opacity: 0.6 }]}
                         onPress={() => router.push("/settings" as any)}
                         hitSlop={8}
                     >
@@ -48,56 +45,78 @@ export function MenuScreen({ topPad, bottomPad, bestScore, onPlay }: MenuScreenP
                 </View>
             </View>
 
-            {/* Center Title */}
             <View style={styles.menuCenter}>
-                <Text style={styles.menuTitle}>TEK TUŞ</Text>
-                <Text style={styles.menuSubtitle}>MATEMATİK</Text>
+                <Text style={styles.menuTitle}>{t.menuTitle}</Text>
+                <Text style={styles.menuSubtitle}>{t.menuSubtitle}</Text>
                 <View style={styles.menuDivider} />
-                <Text style={styles.menuTagline}>Kural var. Süre var. Hata yok.</Text>
+                <Text style={styles.menuTagline}>{t.menuTagline}</Text>
             </View>
 
-            {/* Best Score Card */}
             <View style={styles.menuActions}>
                 {bestScore > 0 && (
-                    <Pressable
-                        style={styles.bestScoreCard}
-                        onPress={() => router.push("/stats" as any)}
-                    >
+                    <Pressable style={styles.bestScoreCard} onPress={() => router.push("/stats" as any)}>
                         <View style={styles.bestScoreIconWrap}>
                             <Ionicons name="trophy" size={24} color={COLORS.orange} />
                         </View>
                         <View style={styles.bestScoreInfo}>
-                            <Text style={styles.bestScoreLabel}>EN İYİ SKOR</Text>
+                            <Text style={styles.bestScoreLabel}>{t.bestScoreLabel}</Text>
                             <Text style={styles.bestScoreValue}>{bestScore}</Text>
                         </View>
                         <Feather name="chevron-right" size={18} color={COLORS.gray + "60"} />
                     </Pressable>
                 )}
 
+                {/* Daily Challenge Card */}
+                <View style={styles.dailyCard}>
+                    <View style={styles.dailyHeader}>
+                        <Ionicons name="calendar" size={16} color={COLORS.mint} />
+                        <Text style={styles.dailyTitle}>{t.dailyChallenge}</Text>
+                        {daily.hasPlayedToday ? (
+                            <View style={styles.dailyBadge}>
+                                <Ionicons name="checkmark" size={10} color="#FFFFFF" />
+                            </View>
+                        ) : (
+                            <View style={styles.dailyBadgeNew}>
+                                <Text style={styles.dailyBadgeNewText}>!</Text>
+                            </View>
+                        )}
+                    </View>
+                    <View style={styles.dailyStats}>
+                        <View style={styles.dailyStat}>
+                            <Text style={styles.dailyStatValue}>{daily.currentDayStreak}</Text>
+                            <Text style={styles.dailyStatLabel}>{t.dayStreak}</Text>
+                        </View>
+                        <View style={styles.dailyStatDivider} />
+                        <View style={styles.dailyStat}>
+                            <Text style={styles.dailyStatValue}>{daily.totalDaysPlayed}</Text>
+                            <Text style={styles.dailyStatLabel}>{t.daysPlayed}</Text>
+                        </View>
+                        <View style={styles.dailyStatDivider} />
+                        <View style={styles.dailyStat}>
+                            <Text style={styles.dailyStatValue}>{daily.hasPlayedToday ? daily.dailyBestScore : "—"}</Text>
+                            <Text style={styles.dailyStatLabel}>{t.dailyBest}</Text>
+                        </View>
+                    </View>
+                </View>
+
                 <Pressable
-                    style={({ pressed }) => [
-                        styles.playButton,
-                        pressed && styles.playButtonPressed,
-                    ]}
+                    style={({ pressed }) => [styles.playButton, pressed && styles.playButtonPressed]}
                     onPress={onPlay}
                     accessibilityRole="button"
-                    accessibilityLabel="Oyunu Başlat"
+                    accessibilityLabel={t.playAccessibility}
                 >
-                    <Text style={styles.playButtonText}>OYNA</Text>
+                    <Text style={styles.playButtonText}>{t.play}</Text>
                     <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
                 </Pressable>
 
                 <Pressable
-                    style={({ pressed }) => [
-                        styles.howToButton,
-                        pressed && { opacity: 0.6 },
-                    ]}
+                    style={({ pressed }) => [styles.howToButton, pressed && { opacity: 0.6 }]}
                     onPress={() => setShowHowTo(true)}
                     accessibilityRole="button"
-                    accessibilityLabel="Nasıl Oynanır"
+                    accessibilityLabel={t.howToPlayAccessibility}
                 >
                     <Feather name="help-circle" size={16} color={COLORS.gray} />
-                    <Text style={styles.howToButtonText}>NASIL OYNANIR?</Text>
+                    <Text style={styles.howToButtonText}>{t.howToPlay}</Text>
                 </Pressable>
             </View>
 
@@ -124,6 +143,17 @@ const styles = StyleSheet.create({
     bestScoreInfo: { flex: 1, gap: 2 },
     bestScoreLabel: { fontSize: 10, fontFamily: "Inter_600SemiBold", color: COLORS.gray, letterSpacing: 2 },
     bestScoreValue: { fontSize: 28, fontFamily: "Inter_700Bold", color: COLORS.dark, letterSpacing: -1 },
+    dailyCard: { width: "100%", backgroundColor: "#F8F8F8", borderRadius: 16, padding: 14, gap: 10, borderWidth: 1, borderColor: COLORS.mint + "20" },
+    dailyHeader: { flexDirection: "row", alignItems: "center", gap: 6 },
+    dailyTitle: { fontSize: 10, fontFamily: "Inter_700Bold", color: COLORS.mint, letterSpacing: 2, flex: 1 },
+    dailyBadge: { width: 18, height: 18, borderRadius: 9, backgroundColor: COLORS.mint, alignItems: "center", justifyContent: "center" },
+    dailyBadgeNew: { width: 18, height: 18, borderRadius: 9, backgroundColor: COLORS.orange, alignItems: "center", justifyContent: "center" },
+    dailyBadgeNewText: { fontSize: 11, fontFamily: "Inter_700Bold", color: "#FFFFFF" },
+    dailyStats: { flexDirection: "row", alignItems: "center" },
+    dailyStat: { flex: 1, alignItems: "center", gap: 2 },
+    dailyStatValue: { fontSize: 18, fontFamily: "Inter_700Bold", color: COLORS.dark },
+    dailyStatLabel: { fontSize: 9, fontFamily: "Inter_500Medium", color: COLORS.gray, letterSpacing: 0.5 },
+    dailyStatDivider: { width: 1, height: 24, backgroundColor: "#E8E8E8" },
     playButton: { flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: COLORS.mint, paddingHorizontal: 48, paddingVertical: 18, borderRadius: 50, shadowColor: COLORS.mint, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.35, shadowRadius: 16, elevation: 8, width: "100%", justifyContent: "center" },
     playButtonPressed: { transform: [{ scale: 0.96 }], shadowOpacity: 0.15 },
     playButtonText: { fontSize: 18, fontFamily: "Inter_700Bold", color: "#FFFFFF", letterSpacing: 2 },

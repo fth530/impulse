@@ -8,10 +8,15 @@ import {
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { LanguageProvider } from "@/i18n/LanguageContext";
+import { LanguageSelector } from "@/components/LanguageSelector";
 import { queryClient } from "@/lib/query-client";
+
+const ONBOARDING_KEY = "tek_tus_onboarding_done";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -46,21 +51,41 @@ export default function RootLayout() {
     Inter_700Bold,
   });
 
+  const [showOnboarding, setShowOnboarding] = useState<boolean | null>(null);
+
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    AsyncStorage.getItem(ONBOARDING_KEY)
+      .then((val) => setShowOnboarding(val !== "true"))
+      .catch(() => setShowOnboarding(true));
+  }, []);
+
+  useEffect(() => {
+    if ((fontsLoaded || fontError) && showOnboarding !== null) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded, fontError, showOnboarding]);
 
   if (!fontsLoaded && !fontError) return null;
+  if (showOnboarding === null) return null;
+
+  const handleOnboardingComplete = () => {
+    AsyncStorage.setItem(ONBOARDING_KEY, "true").catch(() => {});
+    setShowOnboarding(false);
+  };
 
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <RootLayoutNav />
-        </GestureHandlerRootView>
-      </QueryClientProvider>
+      <LanguageProvider>
+        <QueryClientProvider client={queryClient}>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            {showOnboarding ? (
+              <LanguageSelector onComplete={handleOnboardingComplete} />
+            ) : (
+              <RootLayoutNav />
+            )}
+          </GestureHandlerRootView>
+        </QueryClientProvider>
+      </LanguageProvider>
     </ErrorBoundary>
   );
 }
