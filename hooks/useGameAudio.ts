@@ -22,7 +22,26 @@ export function useGameAudio(enabled: boolean) {
     enabled,
   });
 
+  // Update enabled flag
   ref.current.enabled = enabled;
+
+  // When sound is disabled, stop everything immediately
+  useEffect(() => {
+    if (!enabled) {
+      // Stop BGM
+      if (ref.current.bgm) {
+        ref.current.bgm.stopAsync().catch(() => {});
+        ref.current.bgm.unloadAsync().catch(() => {});
+        ref.current.bgm = null;
+      }
+      // Stop all SFX
+      ref.current.sfx.forEach((s) => {
+        s.stopAsync().catch(() => {});
+        s.unloadAsync().catch(() => {});
+      });
+      ref.current.sfx = [];
+    }
+  }, [enabled]);
 
   // Configure audio mode on mount
   useEffect(() => {
@@ -33,13 +52,14 @@ export function useGameAudio(enabled: boolean) {
     });
 
     return () => {
-      stopBgm();
+      if (ref.current.bgm) {
+        ref.current.bgm.unloadAsync().catch(() => {});
+      }
       ref.current.sfx.forEach((s) => s.unloadAsync().catch(() => {}));
       ref.current.sfx = [];
     };
   }, []);
 
-  // ── Play a one-shot sound effect ──
   const playSfx = useCallback(
     async (source: keyof typeof sounds, volume = 0.7) => {
       if (!ref.current.enabled) return;
@@ -61,7 +81,6 @@ export function useGameAudio(enabled: boolean) {
     [],
   );
 
-  // ── Background music (oyunbaslangic — plays once as intro, not looped) ──
   const startBgm = useCallback(async () => {
     if (!ref.current.enabled) return;
     try {
@@ -89,7 +108,6 @@ export function useGameAudio(enabled: boolean) {
     }
   }, []);
 
-  // ── Convenience methods ──
   const playCorrect = useCallback(() => playSfx("correct", 0.6), [playSfx]);
   const playStreak = useCallback(() => playSfx("streak", 0.8), [playSfx]);
   const playGameOver = useCallback(async () => {

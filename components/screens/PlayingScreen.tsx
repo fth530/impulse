@@ -57,19 +57,7 @@ export function PlayingScreen({
                     <Text style={styles.equationText}>{equation.display}</Text>
                 </View>
 
-                <View style={styles.hintRow}>
-                    {ruleMatches ? (
-                        <View style={styles.goHint}>
-                            <Ionicons name="hand-left-outline" size={14} color={COLORS.mint} />
-                            <Text style={styles.goHintText}>{t.tap}</Text>
-                        </View>
-                    ) : (
-                        <View style={styles.noGoHint}>
-                            <Ionicons name="time-outline" size={14} color={COLORS.gray} />
-                            <Text style={styles.noGoHintText}>{t.wait}</Text>
-                        </View>
-                    )}
-                </View>
+                <View style={styles.hintRow} />
             </View>
 
             <View style={[styles.timerContainer, { paddingBottom: bottomPad + 16 }]}>

@@ -30,7 +30,7 @@ export function LanguageSelector({ onComplete }: Props) {
       <View style={styles.header}>
         <Text style={styles.globe}>🌍</Text>
         <Text style={styles.title}>Choose Your Language</Text>
-        <Text style={styles.subtitle}>Dilinizi Seçin</Text>
+        <Text style={styles.subtitle}>Select your preferred language</Text>
       </View>
 
       <View style={styles.grid}>
@@ -51,7 +51,7 @@ export function LanguageSelector({ onComplete }: Props) {
                 language === lang.code && styles.langNameSelected,
               ]}
             >
-              {lang.nativeName}
+              {lang.name}
             </Text>
           </Pressable>
         ))}
